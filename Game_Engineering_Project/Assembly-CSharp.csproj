@@ -6,7 +6,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{B2B58FB2-4462-6B0C-A872-40DD957E5FE0}</ProjectGuid>
+    <ProjectGuid>{02886289-F037-0EB7-F677-288E45ED8721}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -45,6 +45,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Created Input\Scripts\AttackCollider.cs" />
+     <Compile Include="Assets\Created Input\Scripts\MainGameControls.cs" />
      <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanDragLine.cs" />
      <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanDragTrail.cs" />
      <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanDraggable2D.cs" />
@@ -141,7 +143,7 @@
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
  <Reference Include="Vuforia.UnityExtensions">
- <HintPath>C:/Users/BigC/Documents/GitHub/Game Engineering Project/New Unity Project/Assets/Vuforia/Scripts/Internal/Vuforia.UnityExtensions.dll</HintPath>
+ <HintPath>C:/Users/BigC/Documents/GitHub/BoardGame/Game_Engineering_Project/Assets/Vuforia/Scripts/Internal/Vuforia.UnityExtensions.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

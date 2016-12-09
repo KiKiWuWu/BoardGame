@@ -16,8 +16,13 @@ namespace Lean.Touch
 
 		[Tooltip("The color of the selected GameObject")]
 		public Color SelectedColor = Color.green;
-		
-		protected virtual void OnEnable()
+
+
+        public MainGameControls gameController;
+
+
+
+        protected virtual void OnEnable()
 		{
 			// Hook into the events we need
 			LeanTouch.OnFingerTap += OnFingerTap;
@@ -36,29 +41,66 @@ namespace Lean.Touch
 			var hit = default(RaycastHit);
 			
 			// Was this finger pressed down on a collider?
-			if (Physics.Raycast(ray, out hit, float.PositiveInfinity, LayerMask) == true)
+			if (Physics.Raycast(ray, out hit, float.PositiveInfinity, LayerMask))
 			{
-				// Select the hit GameObject
-				Select(hit.collider.gameObject);
+                if (hit.collider.gameObject == GameObject.FindGameObjectWithTag("PlayerOne") && gameController.getCurrentTurn())
+                {
+                    Select(hit.collider.gameObject);
+                    gameController.showMovementDirections(0);
+                }
+                else if(hit.collider.gameObject == GameObject.FindGameObjectWithTag("PlayerTwo") && !gameController.getCurrentTurn())
+                {
+                    Select(hit.collider.gameObject);
+                    gameController.showMovementDirections(1);
+                }
+                if(hit.collider.gameObject.tag == "topDirection" || hit.collider.gameObject.tag == "rightDirection" || hit.collider.gameObject.tag == "bottomDirection" || hit.collider.gameObject.tag == "leftDirection")
+                {
+                    checkIfDirectionFieldWasClicked(hit.collider.gameObject.tag);
+                }
 			}
+
+            /*
 			else
 			{
 				// Nothing was tapped, so deselect
 				Deselect();
 			}
+            */
 		}
 
-		private void Deselect()
+
+        private void checkIfDirectionFieldWasClicked(string direction)
+        {
+            int selectedDirection = 0;
+
+            if(direction == "topDirection")
+            {
+                selectedDirection = 0;
+            }
+            else if(direction == "rightDirection")
+            {
+                selectedDirection = 1;
+            }
+            else if(direction == "bottomDirection")
+            {
+                selectedDirection = 2;
+            }
+            else if(direction == "leftDirection")
+            {
+                selectedDirection = 3;
+            }
+            gameController.removeMoveIndikator();
+            gameController.moveSelectedCharacter(selectedDirection);
+        }
+
+
+
+
+        private void Deselect()
 		{
 			// Is there a selected GameObject?
 			if (SelectedGameObject != null)
 			{
-				// Remove color?
-				if (ColorSelected == true)
-				{
-					ColorGameObject(SelectedGameObject, Color.white);
-				}
-
 				// Mark selected GameObject null
 				SelectedGameObject = null;
 			}
@@ -75,36 +117,11 @@ namespace Lean.Touch
 				// Change selection
 				SelectedGameObject = newGameObject;
 
-				// Apply color to newly selected GameObject?
-				if (ColorSelected == true)
-				{
-					ColorGameObject(SelectedGameObject, SelectedColor);
-				}
 			}
-		}
-		
-		private static void ColorGameObject(GameObject gameObject, Color color)
-		{
-			// Make sure the GameObject exists
-			if (gameObject != null)
-			{
-				// Get renderer from this GameObject
-				var renderer = gameObject.GetComponent<Renderer>();
-
-				// Make sure the Renderer exists
-				if (renderer != null)
-				{
-					// Get material copy from this renderer
-					var material = renderer.material;
-
-					// Make sure the material exists
-					if (material != null)
-					{
-						// Set new color
-						material.color = color;
-					}
-				}
-			}
+            else if(newGameObject == SelectedGameObject)
+            {
+                Deselect();
+            }
 		}
 	}
 }
