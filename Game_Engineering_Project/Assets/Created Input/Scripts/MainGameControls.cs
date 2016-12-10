@@ -5,10 +5,19 @@ public class MainGameControls : MonoBehaviour {
 
     public GameObject PlayerOne;
     public GameObject PlayerTwo;
+    public GameObject EndScreen;
 
     private float scaleNumb = 3;
     private float numberOfFields = 4;
+
     private bool playerTurn = true;
+    private string nameOfPlayer = "";
+
+    private int playerMovementsLeft = 1;
+    private int playerAttacksLeft = 1;
+
+    private int lifePlayerOne = 4;
+    private int lifePlayerTwo = 4;
 
     private GameObject currentPlayer;
 
@@ -16,6 +25,8 @@ public class MainGameControls : MonoBehaviour {
     // Use this for initialization
     void Start() {
         selectPlayer();
+        showPlayerOneLive();
+        showPlayerTwoLive();
 
 
         Debug.Log(PlayerOne.transform.position);
@@ -28,23 +39,74 @@ public class MainGameControls : MonoBehaviour {
         {
             PlayerOne.transform.FindChild("MovementDirections").gameObject.SetActive(true);
             PlayerOne.transform.FindChild("ActiveChar").gameObject.SetActive(true);
+            PlayerOne.transform.FindChild("ColliderPlayerOne").gameObject.SetActive(true);
             PlayerTwo.transform.FindChild("MovementDirections").gameObject.SetActive(false);
             PlayerTwo.transform.FindChild("ActiveChar").gameObject.SetActive(false);
+            PlayerTwo.transform.FindChild("ColliderPlayerTwo").gameObject.SetActive(false);
+
         }
         else
         {
             PlayerTwo.transform.FindChild("MovementDirections").gameObject.SetActive(true);
             PlayerTwo.transform.FindChild("ActiveChar").gameObject.SetActive(true);
+            PlayerTwo.transform.FindChild("ColliderPlayerTwo").gameObject.SetActive(true);
             PlayerOne.transform.FindChild("MovementDirections").gameObject.SetActive(false);
             PlayerOne.transform.FindChild("ActiveChar").gameObject.SetActive(false);
+            PlayerOne.transform.FindChild("ColliderPlayerOne").gameObject.SetActive(false);
         }
     }
 
 
-    // Update is called once per frame
-    void Update () {
-	
-	}
+
+    private void showPlayerOneLive()
+    {
+        PlayerOne.transform.FindChild("LifeOfPlayer").FindChild("Life4").gameObject.SetActive(false);
+        PlayerOne.transform.FindChild("LifeOfPlayer").FindChild("Life3").gameObject.SetActive(false);
+        PlayerOne.transform.FindChild("LifeOfPlayer").FindChild("Life2").gameObject.SetActive(false);
+        PlayerOne.transform.FindChild("LifeOfPlayer").FindChild("Life1").gameObject.SetActive(false);
+        if (lifePlayerOne == 4)
+        {
+            PlayerOne.transform.FindChild("LifeOfPlayer").FindChild("Life4").gameObject.SetActive(true);
+        }
+        else if(lifePlayerOne == 3)
+        {
+            PlayerOne.transform.FindChild("LifeOfPlayer").FindChild("Life3").gameObject.SetActive(true);
+        }
+        else if (lifePlayerOne == 2)
+        {
+            PlayerOne.transform.FindChild("LifeOfPlayer").FindChild("Life2").gameObject.SetActive(true);
+        }
+        else if (lifePlayerOne == 1)
+        {
+            PlayerOne.transform.FindChild("LifeOfPlayer").FindChild("Life1").gameObject.SetActive(true);
+        }
+    }
+
+
+    private void showPlayerTwoLive()
+    {
+        PlayerTwo.transform.FindChild("LifeOfPlayer").FindChild("Life4").gameObject.SetActive(false);
+        PlayerTwo.transform.FindChild("LifeOfPlayer").FindChild("Life3").gameObject.SetActive(false);
+        PlayerTwo.transform.FindChild("LifeOfPlayer").FindChild("Life2").gameObject.SetActive(false);
+        PlayerTwo.transform.FindChild("LifeOfPlayer").FindChild("Life1").gameObject.SetActive(false);
+        if (lifePlayerTwo == 4)
+        {
+            PlayerTwo.transform.FindChild("LifeOfPlayer").FindChild("Life4").gameObject.SetActive(true);
+        }
+        else if (lifePlayerTwo == 3)
+        {
+            PlayerTwo.transform.FindChild("LifeOfPlayer").FindChild("Life3").gameObject.SetActive(true);
+        }
+        else if (lifePlayerTwo == 2)
+        {
+            PlayerTwo.transform.FindChild("LifeOfPlayer").FindChild("Life2").gameObject.SetActive(true);
+        }
+        else if (lifePlayerTwo == 1)
+        {
+            PlayerTwo.transform.FindChild("LifeOfPlayer").FindChild("Life1").gameObject.SetActive(true);
+        }
+    }
+
 
 
     public void showMovementDirections(int player)
@@ -64,8 +126,6 @@ public class MainGameControls : MonoBehaviour {
 
     private void checkShowableMoveDirections()
     {
-        Debug.Log(currentPlayer.transform.position);
-        Debug.Log(numberOfFields * scaleNumb);
         if (currentPlayer.transform.position.x > 0)
         {
             currentPlayer.transform.FindChild("MovementDirections").transform.FindChild("FloorLeft").gameObject.SetActive(true);
@@ -83,6 +143,7 @@ public class MainGameControls : MonoBehaviour {
             currentPlayer.transform.FindChild("MovementDirections").transform.FindChild("FloorTop").gameObject.SetActive(true);
         }
     }
+
 
     public void removeMoveIndikator()
     {
@@ -122,19 +183,102 @@ public class MainGameControls : MonoBehaviour {
         {
             PlayerTwo.transform.position += moveDirection;
         }
+        playerMovementsLeft--;
     }
 
 
     public void changeTurnOfPlayer()
     {
         removeMoveIndikator();
+        nameOfPlayer = "";
+        playerMovementsLeft = 1;
+        playerAttacksLeft = 1;
         playerTurn = !playerTurn;
         selectPlayer();
+        checkAttackRangeOfPlayers();
     }
-    
+
+
+    public void playerInAttackRange(string playerInRangeName)
+    {
+        nameOfPlayer = playerInRangeName;
+        checkAttackRangeOfPlayers();
+    }
+
+
+    private void checkAttackRangeOfPlayers()
+    {
+        if(nameOfPlayer == PlayerOne.name && playerAttacksLeft > 0)
+        {
+            PlayerOne.transform.FindChild("AttackableChar").gameObject.SetActive(true);
+        }
+        else if(nameOfPlayer == PlayerTwo.name && playerAttacksLeft > 0)
+        {
+            PlayerTwo.transform.FindChild("AttackableChar").gameObject.SetActive(true);
+        }
+        else
+        {
+            PlayerOne.transform.FindChild("AttackableChar").gameObject.SetActive(false);
+            PlayerTwo.transform.FindChild("AttackableChar").gameObject.SetActive(false);
+        }
+    }
+
+
+    public void attackPlayer(int player)
+    {
+        int temp = Random.Range(1, 10);
+        int damage;
+        if (temp == 2 || temp == 5)
+        {
+            damage = 2;
+        }
+        else if (temp == 9)
+        {
+            damage = 3;
+        }
+        else
+        {
+            damage = 1;
+        }
+        
+
+
+        if(player == 1 && nameOfPlayer == PlayerTwo.name && playerAttacksLeft > 0)
+        {
+            lifePlayerTwo -= damage;
+            playerAttacksLeft--;
+            showPlayerTwoLive();
+        }
+        else if(player == 0 && nameOfPlayer == PlayerOne.name && playerAttacksLeft > 0)
+        {
+            lifePlayerOne -= damage;
+            playerAttacksLeft--;
+            showPlayerOneLive();
+        }
+        checkAttackRangeOfPlayers();
+        checkStateOfGame();
+    }
+
+
+    private void checkStateOfGame()
+    {
+        if(lifePlayerOne == 0 || lifePlayerTwo == 0)
+        {
+            Time.timeScale = 0;
+            EndScreen.SetActive(true);
+        }
+    }
+
+
+
     public bool getCurrentTurn()
     {
         return playerTurn;
     }
-    
+
+
+    public int getNumberOfMovements()
+    {
+        return playerMovementsLeft;
+    }
 }

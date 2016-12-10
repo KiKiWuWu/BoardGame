@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Created Input\Scripts\AttackCollider.cs" />
+     <Compile Include="Assets\Created Input\Scripts\EndGameFunctions.cs" />
      <Compile Include="Assets\Created Input\Scripts\MainGameControls.cs" />
      <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanDragLine.cs" />
      <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanDragTrail.cs" />

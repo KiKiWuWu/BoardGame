@@ -43,19 +43,27 @@ namespace Lean.Touch
 			// Was this finger pressed down on a collider?
 			if (Physics.Raycast(ray, out hit, float.PositiveInfinity, LayerMask))
 			{
-                if (hit.collider.gameObject == GameObject.FindGameObjectWithTag("PlayerOne") && gameController.getCurrentTurn())
+                if (hit.collider.gameObject == GameObject.FindGameObjectWithTag("PlayerOne") && gameController.getCurrentTurn() && gameController.getNumberOfMovements() > 0)
                 {
                     Select(hit.collider.gameObject);
-                    gameController.showMovementDirections(0);
                 }
-                else if(hit.collider.gameObject == GameObject.FindGameObjectWithTag("PlayerTwo") && !gameController.getCurrentTurn())
+                else if(hit.collider.gameObject == GameObject.FindGameObjectWithTag("PlayerTwo") && !gameController.getCurrentTurn() && gameController.getNumberOfMovements() > 0)
                 {
                     Select(hit.collider.gameObject);
-                    gameController.showMovementDirections(1);
                 }
                 if(hit.collider.gameObject.tag == "topDirection" || hit.collider.gameObject.tag == "rightDirection" || hit.collider.gameObject.tag == "bottomDirection" || hit.collider.gameObject.tag == "leftDirection")
                 {
                     checkIfDirectionFieldWasClicked(hit.collider.gameObject.tag);
+                }
+
+
+                if(gameController.getCurrentTurn() && hit.collider.gameObject == GameObject.FindGameObjectWithTag("PlayerTwo"))
+                {
+                    gameController.attackPlayer(1);
+                }
+                else if(!gameController.getCurrentTurn() && hit.collider.gameObject == GameObject.FindGameObjectWithTag("PlayerOne"))
+                {
+                    gameController.attackPlayer(0);
                 }
 			}
 
@@ -89,7 +97,7 @@ namespace Lean.Touch
             {
                 selectedDirection = 3;
             }
-            gameController.removeMoveIndikator();
+            Deselect();
             gameController.moveSelectedCharacter(selectedDirection);
         }
 
@@ -103,7 +111,9 @@ namespace Lean.Touch
 			{
 				// Mark selected GameObject null
 				SelectedGameObject = null;
-			}
+                gameController.removeMoveIndikator();
+
+            }
 		}
 
 		private void Select(GameObject newGameObject)
@@ -112,10 +122,19 @@ namespace Lean.Touch
 			if (newGameObject != SelectedGameObject)
 			{
 				// Deselect the old GameObject
-				Deselect();
+				//Deselect();
 
 				// Change selection
 				SelectedGameObject = newGameObject;
+
+                if(newGameObject.tag == "PlayerOne")
+                {
+                    gameController.showMovementDirections(0);
+                }
+                else if(newGameObject.tag == "PlayerTwo")
+                {
+                    gameController.showMovementDirections(1);
+                }
 
 			}
             else if(newGameObject == SelectedGameObject)

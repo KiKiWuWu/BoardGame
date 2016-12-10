@@ -60,7 +60,7 @@ namespace Vuforia
         }
 
         #endregion // PUBLIC_METHODS
-
+        public GameObject Canvas;
 
 
         #region PRIVATE_METHODS
@@ -83,6 +83,8 @@ namespace Vuforia
                 component.enabled = true;
             }
 
+            Canvas.SetActive(true);
+
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " found");
         }
 
@@ -103,6 +105,8 @@ namespace Vuforia
             {
                 component.enabled = false;
             }
+
+            Canvas.SetActive(false);
 
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
         }

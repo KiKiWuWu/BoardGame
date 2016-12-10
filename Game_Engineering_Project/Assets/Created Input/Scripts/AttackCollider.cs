@@ -3,13 +3,16 @@ using System.Collections;
 
 public class AttackCollider : MonoBehaviour {
 
+    public MainGameControls gameController;
+
     void OnTriggerEnter (Collider collidedObject)
     {
-        Debug.Log(collidedObject.name + "Player TWOOOO IS HERE");
+        gameController.playerInAttackRange(collidedObject.transform.parent.name);
     }
 
     void OnTriggerExit (Collider collidedObject)
     {
-        Debug.Log(collidedObject + "Player TWOOOO EXIIIT");
+        gameController.playerInAttackRange("no Player in range");
+        Debug.Log(collidedObject.name + "Player TWOOOO EXIIIT");
     }
 }
