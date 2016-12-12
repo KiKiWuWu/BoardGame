@@ -5,7 +5,7 @@ public class MainGameControls : MonoBehaviour {
 
     public GameObject PlayerOne;
     public GameObject PlayerTwo;
-    public GameObject EndScreen;
+    public GameObject Canvas;
 
     private float scaleNumb = 3;
     private float numberOfFields = 4;
@@ -16,14 +16,15 @@ public class MainGameControls : MonoBehaviour {
     private int playerMovementsLeft = 1;
     private int playerAttacksLeft = 1;
 
-    private int lifePlayerOne = 4;
-    private int lifePlayerTwo = 4;
+    private int lifePlayerOne;
+    private int lifePlayerTwo;
 
     private GameObject currentPlayer;
 
 
     // Use this for initialization
     void Start() {
+        initializePlayersLife();
         selectPlayer();
         showPlayerOneLive();
         showPlayerTwoLive();
@@ -33,26 +34,41 @@ public class MainGameControls : MonoBehaviour {
         Debug.Log(PlayerTwo.transform.position);
     }
 
+
+    private void initializePlayersLife()
+    {
+        lifePlayerOne = 4;
+        lifePlayerTwo = 4;
+    }
+
     private void selectPlayer()
     {
         if (playerTurn)
         {
+            currentPlayer = PlayerOne;
+
             PlayerOne.transform.FindChild("MovementDirections").gameObject.SetActive(true);
             PlayerOne.transform.FindChild("ActiveChar").gameObject.SetActive(true);
             PlayerOne.transform.FindChild("ColliderPlayerOne").gameObject.SetActive(true);
             PlayerTwo.transform.FindChild("MovementDirections").gameObject.SetActive(false);
             PlayerTwo.transform.FindChild("ActiveChar").gameObject.SetActive(false);
             PlayerTwo.transform.FindChild("ColliderPlayerTwo").gameObject.SetActive(false);
+            Canvas.transform.FindChild("PlayerTurnOnScreen").FindChild("CurrentPlayer").FindChild("PlayerOneOnScreen").gameObject.SetActive(true);
+            Canvas.transform.FindChild("PlayerTurnOnScreen").FindChild("CurrentPlayer").FindChild("PlayerTwoOnScreen").gameObject.SetActive(false);
 
         }
         else
         {
+            currentPlayer = PlayerTwo;
+
             PlayerTwo.transform.FindChild("MovementDirections").gameObject.SetActive(true);
             PlayerTwo.transform.FindChild("ActiveChar").gameObject.SetActive(true);
             PlayerTwo.transform.FindChild("ColliderPlayerTwo").gameObject.SetActive(true);
             PlayerOne.transform.FindChild("MovementDirections").gameObject.SetActive(false);
             PlayerOne.transform.FindChild("ActiveChar").gameObject.SetActive(false);
             PlayerOne.transform.FindChild("ColliderPlayerOne").gameObject.SetActive(false);
+            Canvas.transform.FindChild("PlayerTurnOnScreen").FindChild("CurrentPlayer").FindChild("PlayerOneOnScreen").gameObject.SetActive(false);
+            Canvas.transform.FindChild("PlayerTurnOnScreen").FindChild("CurrentPlayer").FindChild("PlayerTwoOnScreen").gameObject.SetActive(true);
         }
     }
 
@@ -110,16 +126,7 @@ public class MainGameControls : MonoBehaviour {
 
 
     public void showMovementDirections(int player)
-    {
-        if (player == 0)
-        {
-            currentPlayer = PlayerOne;
-        }
-        else
-        {
-            currentPlayer = PlayerTwo;
-        }
-        
+    {        
         checkShowableMoveDirections();
     }
 
@@ -196,6 +203,20 @@ public class MainGameControls : MonoBehaviour {
         playerTurn = !playerTurn;
         selectPlayer();
         checkAttackRangeOfPlayers();
+        showNextPlayerScreen();
+    }
+
+
+    private void showNextPlayerScreen()
+    {
+        Canvas.transform.FindChild("ChangeTurnScreen").gameObject.SetActive(true);
+
+        Invoke("hideTurnScreen", 1);
+    }
+
+    void hideTurnScreen()
+    {
+        Canvas.transform.FindChild("ChangeTurnScreen").gameObject.SetActive(false);
     }
 
 
@@ -262,10 +283,10 @@ public class MainGameControls : MonoBehaviour {
 
     private void checkStateOfGame()
     {
-        if(lifePlayerOne == 0 || lifePlayerTwo == 0)
+        if(lifePlayerOne <= 0 || lifePlayerTwo <= 0)
         {
-            Time.timeScale = 0;
-            EndScreen.SetActive(true);
+            Canvas.transform.FindChild("EndScreen").gameObject.SetActive(true);
+            //EndScreen.SetActive(true);
         }
     }
 
