@@ -46,6 +46,9 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\LeanTouch\Editor\LeanTouch_Editor.cs" />
+     <Compile Include="Assets\TBS Framework\Editor\CustomObstacleGeneratorHelper.cs" />
+     <Compile Include="Assets\TBS Framework\Editor\CustomUnitGeneratorHelper.cs" />
+     <Compile Include="Assets\TBS Framework\Editor\GridGeneratorHelper.cs" />
      <Compile Include="Assets\Vuforia\Editor\Scripts\ComponentFactoryStarter\ComponentFactoryStarter.cs" />
      <Compile Include="Assets\Vuforia\Editor\Scripts\ExtensionImport.cs" />
      <Compile Include="Assets\Vuforia\Editor\Scripts\PostProcessBuildPlayer.cs" />
@@ -66,6 +69,7 @@
      <None Include="Assets\StreamingAssets\QCAR\GE_Project_DB.xml" />
      <None Include="Assets\Vuforia\Shaders\ClippingMask.shader" />
      <None Include="Assets\Vuforia\Shaders\BrightTexture.shader" />
+     <None Include="Assets\TBS Framework\ReleaseNotes.txt" />
      <None Include="Assets\Vuforia\Shaders\Text3D.shader" />
  <Reference Include="Assembly-UnityScript">
  <HintPath>C:/Users/BigC/Documents/GitHub/BoardGame/Game_Engineering_Project/Library/ScriptAssemblies/Assembly-UnityScript.dll</HintPath>
