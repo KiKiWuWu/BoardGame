@@ -106,7 +106,11 @@ namespace Vuforia
                 component.enabled = false;
             }
 
-            Canvas.SetActive(false);
+            if(Canvas != null)
+            {
+                Canvas.SetActive(false);
+            }
+            
 
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
         }

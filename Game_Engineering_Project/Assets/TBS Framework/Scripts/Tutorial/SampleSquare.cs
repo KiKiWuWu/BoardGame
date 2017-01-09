@@ -18,6 +18,7 @@ class SampleSquare : Square
 
         //GetComponent<Renderer>().material.color = Color.green;
     }
+    
 
     public override void MarkAsReachable()
     {
