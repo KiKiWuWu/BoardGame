@@ -1,19 +1,58 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class TestCollider : MonoBehaviour {
 
-    
+    private List<Unit> unitsList = new List<Unit>();
 
-    void OnTriggerEnter (Collider collidedObject)
+
+    public bool objectsInBuffArea = false;
+
+
+    /*
+    void Update()
     {
-        //gameController.playerInAttackRange(collidedObject.transform.parent.name);
-        Debug.Log(collidedObject.transform.position);
+        if(unitsList.Count > 0)
+        {
+            Debug.Log("MOOOORRREEEEEE");
+        }
+        else
+        {
+            Debug.Log("LEEEEESSSSSSSS");
+        }
+    }
+
+    */
+
+    void OnTriggerEnter(Collider collidedObject)
+    {
+        var unit = GameObject.Find(collidedObject.transform.name).GetComponent<Unit>();
+        if (!unitsList.Contains(unit))
+        {
+            unitsList.Add(unit);
+        }
+        
+        //Debug.Log(collidedObject.transform.name);
+        //Debug.Log("TRIGGERRRRRRRRRRRRRRRR Enter");
+        Debug.Log("UNIT ADDDEEEEDDDD");
     }
 
     void OnTriggerExit (Collider collidedObject)
     {
-        //gameController.playerInAttackRange("no Player in range");
-        //Debug.Log(collidedObject.name + "Player TWOOOO EXIIIT");
+        var unit = GameObject.Find(collidedObject.transform.name).GetComponent<Unit>();
+        if (unitsList.Contains(unit))
+        {
+            unitsList.Remove(unit);
+        }
+
+        //Debug.Log("TRIGGERRRRRRRRRRRRRRRR Exit");
+        //Debug.Log(collidedObject.transform.name);
+        Debug.Log("UNIT REMOVEEEEDDDDD");
+    }
+
+
+    public List<Unit> getUnitsForBuff()
+    {
+        return unitsList;
     }
 }

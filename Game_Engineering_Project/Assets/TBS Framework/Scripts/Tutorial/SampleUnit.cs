@@ -1,9 +1,11 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SampleUnit : Unit
 {
     Coroutine PulseCoroutine;
+
 
     public Color LeadingColor;
     public override void Initialize()
@@ -17,7 +19,7 @@ public class SampleUnit : Unit
     {
         base.OnUnitDeselected();
         StopCoroutine(PulseCoroutine);
-        transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+        transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
     }
 
     public override void MarkAsAttacking(Unit other)

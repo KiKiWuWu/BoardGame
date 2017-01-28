@@ -45,10 +45,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Created Input\Scripts\AttackCollider.cs" />
      <Compile Include="Assets\Created Input\Scripts\EndGameFunctions.cs" />
      <Compile Include="Assets\Created Input\Scripts\HighlightOfTheField.cs" />
-     <Compile Include="Assets\Created Input\Scripts\MainGameControls.cs" />
      <Compile Include="Assets\Created Input\Scripts\TestCollider.cs" />
      <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanDragLine.cs" />
      <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanDragTrail.cs" />
@@ -121,11 +119,11 @@
      <Compile Include="Assets\TBS Framework\Scripts\Core\UnitStateMarkedAsSelected.cs" />
      <Compile Include="Assets\TBS Framework\Scripts\Core\UnitStateNormal.cs" />
      <Compile Include="Assets\TBS Framework\Scripts\Example1\Archer.cs" />
-     <Compile Include="Assets\TBS Framework\Scripts\Example1\AttackBuff.cs" />
-     <Compile Include="Assets\TBS Framework\Scripts\Example1\BuffSpawner.cs" />
-     <Compile Include="Assets\TBS Framework\Scripts\Example1\DefenceBuff.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Example1\AttackBuffOne.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Example1\BuffSpawnerOne.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Example1\DefenceBuffOne.cs" />
      <Compile Include="Assets\TBS Framework\Scripts\Example1\GuiController.cs" />
-     <Compile Include="Assets\TBS Framework\Scripts\Example1\HealingBuff.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Example1\HealingBuffOne.cs" />
      <Compile Include="Assets\TBS Framework\Scripts\Example1\Hero.cs" />
      <Compile Include="Assets\TBS Framework\Scripts\Example1\MyHexagon.cs" />
      <Compile Include="Assets\TBS Framework\Scripts\Example1\MyUnit.cs" />
@@ -139,7 +137,11 @@
      <Compile Include="Assets\TBS Framework\Scripts\Example3\GenericUnit.cs" />
      <Compile Include="Assets\TBS Framework\Scripts\Example3\MySquare.cs" />
      <Compile Include="Assets\TBS Framework\Scripts\Example3\NextGuiController.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Tutorial\AttackBuff.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Tutorial\BuffSpawner.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Tutorial\DefenceBuff.cs" />
      <Compile Include="Assets\TBS Framework\Scripts\Tutorial\GUIController.cs" />
+     <Compile Include="Assets\TBS Framework\Scripts\Tutorial\HealingBuff.cs" />
      <Compile Include="Assets\TBS Framework\Scripts\Tutorial\SampleSquare.cs" />
      <Compile Include="Assets\TBS Framework\Scripts\Tutorial\SampleUnit.cs" />
      <Compile Include="Assets\Vuforia\Scripts\BackgroundPlaneBehaviour.cs" />
@@ -197,9 +199,9 @@
      <None Include="Assets\Vuforia\Editor\WebcamProfiles\profiles.xml" />
      <None Include="Assets\Vuforia\Shaders\DepthMask.shader" />
      <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
-     <None Include="Assets\StreamingAssets\QCAR\GE_Project_DB.xml" />
      <None Include="Assets\Vuforia\Shaders\ClippingMask.shader" />
      <None Include="Assets\Vuforia\Shaders\BrightTexture.shader" />
+     <None Include="Assets\StreamingAssets\QCAR\GE_Project_DB.xml" />
      <None Include="Assets\TBS Framework\ReleaseNotes.txt" />
      <None Include="Assets\Vuforia\Shaders\Text3D.shader" />
  <Reference Include="UnityEngine.UI">

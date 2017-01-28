@@ -1,13 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GUIController : MonoBehaviour
+public class GUIControllerHexa : MonoBehaviour
 {
     public CellGrid CellGrid;
     public GameObject ChangeTurnScreen;
     public GameObject EndScreen;
+    public GameObject BuffScreen;
     public Text EndScreenText;
+    public bool buffActivated = false;
+
+    private BuffSpawner _buffSpawner = new BuffSpawner();
 
     void Start()
     {
@@ -57,4 +62,31 @@ public class GUIController : MonoBehaviour
     }
 
 
+    public void executeBuff()
+    {
+        if (!buffActivated)
+        {
+            List<Unit> listWithUnitsToBuff = new List<Unit>();
+            listWithUnitsToBuff = GameObject.FindGameObjectWithTag("attackBuff").GetComponent<TestCollider>().getUnitsForBuff();
+
+            if (listWithUnitsToBuff.Count != 0)
+            {
+                for (int i = 0; i < listWithUnitsToBuff.Count; i++)
+                {
+                    _buffSpawner.SpawnBuff(new AttackBuff(0, 10), listWithUnitsToBuff[i]);
+                }
+            }
+
+            BuffScreen.SetActive(true);
+            Invoke("hideBuffScreenInformation", 1);
+
+            buffActivated = !buffActivated;
+        }
+    }
+
+
+    private void hideBuffScreenInformation()
+    {
+        BuffScreen.SetActive(false);
+    }
 }

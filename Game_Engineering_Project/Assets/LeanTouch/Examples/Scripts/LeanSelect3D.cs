@@ -18,10 +18,6 @@ namespace Lean.Touch
 		public Color SelectedColor = Color.green;
 
 
-        public MainGameControls gameController;
-
-
-
         protected virtual void OnEnable()
 		{
 			// Hook into the events we need
@@ -43,63 +39,18 @@ namespace Lean.Touch
 			// Was this finger pressed down on a collider?
 			if (Physics.Raycast(ray, out hit, float.PositiveInfinity, LayerMask))
 			{
-                if (hit.collider.gameObject == GameObject.FindGameObjectWithTag("PlayerOne") && gameController.getCurrentTurn() && gameController.getNumberOfMovements() > 0)
-                {
-                    Select(hit.collider.gameObject);
-                }
-                else if(hit.collider.gameObject == GameObject.FindGameObjectWithTag("PlayerTwo") && !gameController.getCurrentTurn() && gameController.getNumberOfMovements() > 0)
-                {
-                    Select(hit.collider.gameObject);
-                }
-                if(hit.collider.gameObject.tag == "topDirection" || hit.collider.gameObject.tag == "rightDirection" || hit.collider.gameObject.tag == "bottomDirection" || hit.collider.gameObject.tag == "leftDirection")
-                {
-                    checkIfDirectionFieldWasClicked(hit.collider.gameObject.tag);
-                }
-
-
-                if(gameController.getCurrentTurn() && hit.collider.gameObject == GameObject.FindGameObjectWithTag("PlayerTwo"))
-                {
-                    gameController.attackPlayer(1);
-                }
-                else if(!gameController.getCurrentTurn() && hit.collider.gameObject == GameObject.FindGameObjectWithTag("PlayerOne"))
-                {
-                    gameController.attackPlayer(0);
-                }
+                   Select(hit.collider.gameObject);
 			}
 
-            /*
+            
 			else
 			{
 				// Nothing was tapped, so deselect
 				Deselect();
 			}
-            */
+            
 		}
 
-
-        private void checkIfDirectionFieldWasClicked(string direction)
-        {
-            int selectedDirection = 0;
-
-            if(direction == "topDirection")
-            {
-                selectedDirection = 0;
-            }
-            else if(direction == "rightDirection")
-            {
-                selectedDirection = 1;
-            }
-            else if(direction == "bottomDirection")
-            {
-                selectedDirection = 2;
-            }
-            else if(direction == "leftDirection")
-            {
-                selectedDirection = 3;
-            }
-            Deselect();
-            gameController.moveSelectedCharacter(selectedDirection);
-        }
 
 
 
@@ -111,7 +62,6 @@ namespace Lean.Touch
 			{
 				// Mark selected GameObject null
 				SelectedGameObject = null;
-                gameController.removeMoveIndikator();
 
             }
 		}
@@ -126,16 +76,6 @@ namespace Lean.Touch
 
 				// Change selection
 				SelectedGameObject = newGameObject;
-
-                if(newGameObject.tag == "PlayerOne")
-                {
-                    gameController.showMovementDirections(0);
-                }
-                else if(newGameObject.tag == "PlayerTwo")
-                {
-                    gameController.showMovementDirections(1);
-                }
-
 			}
             else if(newGameObject == SelectedGameObject)
             {
