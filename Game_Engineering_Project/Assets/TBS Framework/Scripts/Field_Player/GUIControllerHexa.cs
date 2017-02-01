@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GUIController : MonoBehaviour
+public class GUIControllerHexa : MonoBehaviour
 {
     public CellGrid CellGrid;
     public GameObject ChangeTurnScreen;
@@ -13,6 +13,8 @@ public class GUIController : MonoBehaviour
     public bool buffActivated = false;
 
     private BuffSpawner _buffSpawner = new BuffSpawner();
+
+    private ActionCount actionsCounter = new ActionCount();
 
     void Start()
     {
@@ -25,8 +27,10 @@ public class GUIController : MonoBehaviour
         Application.Quit();
     }
 
+
     public void finishTurn()
     {
+        actionsCounter.showCount();
         CellGrid.EndTurn();
     }
 
