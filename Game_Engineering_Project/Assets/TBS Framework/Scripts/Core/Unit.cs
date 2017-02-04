@@ -9,6 +9,11 @@ using System.Collections;
 /// </summary>
 public abstract class Unit : MonoBehaviour
 {
+    private ActionCount actionsCounter;
+    private GUIControllerHexa GUIController;
+
+
+
     /// <summary>
     /// UnitClicked event is invoked when user clicks the unit. It requires a collider on the unit game object to work.
     /// </summary>
@@ -79,12 +84,14 @@ public abstract class Unit : MonoBehaviour
     public virtual void Initialize()
     {
         Buffs = new List<Buff>();
+        actionsCounter = GameObject.FindGameObjectWithTag("GameController").GetComponent<ActionCount>();
+        GUIController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GUIControllerHexa>();
 
         UnitState = new UnitStateNormal(this);
 
         TotalHitPoints = HitPoints;
-        TotalMovementPoints = MovementPoints;
         TotalActionPoints = ActionPoints;
+        TotalMovementPoints = MovementPoints;
     }
 
     protected virtual void OnMouseDown()
@@ -139,6 +146,13 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public virtual void OnUnitSelected()
     {
+        Debug.Log("CHECK IF ACTIONPOINTS ARE AVAILABLE = " + actionsCounter.remainingActionPoints());
+        if(actionsCounter.remainingActionPoints() < MovementPoints)
+        {
+            Debug.Log("ITTTTT WORRRKKEEEEEDDDD NOW ONLY = " + actionsCounter.remainingActionPoints());
+            MovementPoints = actionsCounter.remainingActionPoints();
+        }
+
         SetState(new UnitStateMarkedAsSelected(this));
         if (UnitSelected != null)
             UnitSelected.Invoke(this, new EventArgs());
@@ -175,15 +189,23 @@ public abstract class Unit : MonoBehaviour
         if (!IsUnitAttackable(other, Cell))
             return;
 
-        MarkAsAttacking(other);
-        ActionPoints--;
-        other.Defend(this, AttackFactor);
-
-        if (ActionPoints == 0)
+        if(actionsCounter.remainingActionPoints() >= 5)
         {
-            SetState(new UnitStateMarkedAsFinished(this));
-            MovementPoints = 0;
-        }  
+            MarkAsAttacking(other);
+            ActionPoints--;
+            actionsCounter.subtractCostOfActionFromCurrentActionCount(5);
+            other.Defend(this, AttackFactor);
+
+            if (ActionPoints == 0)
+            {
+                SetState(new UnitStateMarkedAsFinished(this));
+                MovementPoints = 0;
+            }
+        }
+        else
+        {
+            GUIController.showAttackNotPossibleMessage();
+        }
     }
     /// <summary>
     /// Attacking unit calls Defend method on defending unit. 
@@ -214,6 +236,7 @@ public abstract class Unit : MonoBehaviour
             return;
 
         MovementPoints -= totalMovementCost;
+        actionsCounter.subtractCostOfActionFromCurrentActionCount(totalMovementCost);
 
         Cell.IsTaken = false;
         Cell = destinationCell;

@@ -9,12 +9,13 @@ public class GUIControllerHexa : MonoBehaviour
     public GameObject ChangeTurnScreen;
     public GameObject EndScreen;
     public GameObject BuffScreen;
+    public GameObject NotEnoughtActionPointsScreen;
     public Text EndScreenText;
     public bool buffActivated = false;
 
     private BuffSpawner _buffSpawner = new BuffSpawner();
 
-    private ActionCount actionsCounter = new ActionCount();
+    public ActionCount actionsCounter;
 
     void Start()
     {
@@ -30,7 +31,7 @@ public class GUIControllerHexa : MonoBehaviour
 
     public void finishTurn()
     {
-        actionsCounter.showCount();
+        actionsCounter.restartAvailableActionPoints();
         CellGrid.EndTurn();
     }
 
@@ -92,5 +93,19 @@ public class GUIControllerHexa : MonoBehaviour
     private void hideBuffScreenInformation()
     {
         BuffScreen.SetActive(false);
+    }
+
+
+    public void showAttackNotPossibleMessage()
+    {
+        NotEnoughtActionPointsScreen.SetActive(true);
+        Invoke("hideActionPointsMessage", 0.7f);
+    }
+
+
+
+    private void hideActionPointsMessage()
+    {
+        NotEnoughtActionPointsScreen.SetActive(false);
     }
 }

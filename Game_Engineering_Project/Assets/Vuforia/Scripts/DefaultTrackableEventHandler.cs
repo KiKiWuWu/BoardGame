@@ -61,9 +61,7 @@ namespace Vuforia
 
         #endregion // PUBLIC_METHODS
         public GameObject Canvas;
-        public GameObject ActivateBuff;
 
-        
 
         #region PRIVATE_METHODS
 
@@ -85,16 +83,11 @@ namespace Vuforia
                 component.enabled = true;
             }
 
-            Canvas.SetActive(true);
 
-            
-            
-
-            if(mTrackableBehaviour.TrackableName == "HealSymbol")
+            if(mTrackableBehaviour.TrackableName == "stones")
             {
-                ActivateBuff.SetActive(true);
+                Canvas.SetActive(true);
             }
-
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " found");
         }
 
@@ -116,18 +109,11 @@ namespace Vuforia
                 component.enabled = false;
             }
 
-            if(Canvas != null)
+
+            if (mTrackableBehaviour.TrackableName == "stones")
             {
                 Canvas.SetActive(false);
             }
-
-            Debug.Log(mTrackableBehaviour.enabled);
-
-            if (mTrackableBehaviour.TrackableName == "HealSymbol")
-            {
-                ActivateBuff.SetActive(false);
-            }
-
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
         }
 
