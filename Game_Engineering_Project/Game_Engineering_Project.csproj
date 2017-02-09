@@ -79,8 +79,41 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Created Input\Scripts\EndGameFunctions.cs" />
-    <Compile Include="Assets\Created Input\Scripts\HighlightOfTheField.cs" />
     <Compile Include="Assets\Created Input\Scripts\TestCollider.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanDestroy.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanDragLine.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanDragTrail.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanFingerDown.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanFingerTap.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanFingerUp.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanMultiTap.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanMultiTapInfo.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanOpenUrl.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanRotate.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanScale.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanSelect.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanSelectable.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanSelectableBehaviour.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanSelectableRendererColor.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanSelectableSpriteRendererColor.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanSelectableTranslateInertia2D.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanSelectableTranslateInertia3D.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanSideCamera2D.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanSideCamera3D.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanSpawnGameObject.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanSwipeDirection4.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanSwipeDirection8.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanSwipeRigidbody2D.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanSwipeRigidbody2DNoRelease.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanSwipeRigidbody3D.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanSwipeRigidbody3DNoRelease.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanTouchEvents.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanTranslate.cs" />
+    <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanTranslateSmooth.cs" />
+    <Compile Include="Assets\LeanTouch\Scripts\LeanFinger.cs" />
+    <Compile Include="Assets\LeanTouch\Scripts\LeanGesture.cs" />
+    <Compile Include="Assets\LeanTouch\Scripts\LeanSnapshot.cs" />
+    <Compile Include="Assets\LeanTouch\Scripts\LeanTouch.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Core\AStarPathfinding.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Core\BreadthFirstSearch.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Core\Buff.cs" />
@@ -122,15 +155,17 @@
     <Compile Include="Assets\TBS Framework\Scripts\Core\UnitStateMarkedAsSelected.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Core\UnitStateNormal.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\ActionCount.cs" />
+    <Compile Include="Assets\TBS Framework\Scripts\Field_Player\AttackBuff.cs" />
+    <Compile Include="Assets\TBS Framework\Scripts\Field_Player\BuffCollider.cs" />
+    <Compile Include="Assets\TBS Framework\Scripts\Field_Player\BuffExecuter.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\BuffSpawner.cs" />
+    <Compile Include="Assets\TBS Framework\Scripts\Field_Player\FieldPositionController.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\GUIControllerHexa.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\MyHexagon.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\Tutorial\AttackBuff.cs" />
+    <Compile Include="Assets\TBS Framework\Scripts\Field_Player\SampleUnit.cs" />
+    <Compile Include="Assets\TBS Framework\Scripts\Field_Player\TrackableImageOnScreenHandler.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Tutorial\DefenceBuff.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\Tutorial\GUIControllerSquare.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Tutorial\HealingBuff.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\Tutorial\SampleSquare.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\Tutorial\SampleUnit.cs" />
     <Compile Include="Assets\Vuforia\Scripts\BackgroundPlaneBehaviour.cs" />
     <Compile Include="Assets\Vuforia\Scripts\CloudRecoBehaviour.cs" />
     <Compile Include="Assets\Vuforia\Scripts\CylinderTargetBehaviour.cs" />
@@ -169,6 +204,9 @@
     <Compile Include="Assets\cha_data\Script\ScreenShot.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\LeanTouch\Examples\Fonts\OFL.txt" />
+    <None Include="Assets\LeanTouch\Examples\Shaders\BackgroundSkybox.shader" />
+    <None Include="Assets\LeanTouch\Examples\Shaders\Smooth.shader" />
     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
     <None Include="Assets\StreamingAssets\QCAR\GE_Project_DB.xml" />
     <None Include="Assets\TBS Framework\ReleaseNotes.txt" />

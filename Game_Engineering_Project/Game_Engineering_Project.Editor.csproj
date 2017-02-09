@@ -135,6 +135,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\LeanTouch\Editor\LeanTouch_Editor.cs" />
     <Compile Include="Assets\TBS Framework\Editor\CustomObstacleGeneratorHelper.cs" />
     <Compile Include="Assets\TBS Framework\Editor\CustomUnitGeneratorHelper.cs" />
     <Compile Include="Assets\TBS Framework\Editor\GridGeneratorHelper.cs" />
@@ -145,6 +146,9 @@
     <Compile Include="Assets\Vuforia\Editor\Scripts\VuforiaConfigurationEditor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\LeanTouch\Examples\Fonts\OFL.txt" />
+    <None Include="Assets\LeanTouch\Examples\Shaders\BackgroundSkybox.shader" />
+    <None Include="Assets\LeanTouch\Examples\Shaders\Smooth.shader" />
     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
     <None Include="Assets\StreamingAssets\QCAR\GE_Project_DB.xml" />
     <None Include="Assets\TBS Framework\ReleaseNotes.txt" />

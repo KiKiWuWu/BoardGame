@@ -14,8 +14,10 @@ namespace Vuforia
     public class DefaultTrackableEventHandler : MonoBehaviour,
                                                 ITrackableEventHandler
     {
+        private TrackableImageOnScreenHandler trackableHandler; 
+
         #region PRIVATE_MEMBER_VARIABLES
- 
+
         private TrackableBehaviour mTrackableBehaviour;
     
         #endregion // PRIVATE_MEMBER_VARIABLES
@@ -26,6 +28,8 @@ namespace Vuforia
     
         void Start()
         {
+            trackableHandler = GameObject.FindGameObjectWithTag("GameController").GetComponent<TrackableImageOnScreenHandler>();
+
             mTrackableBehaviour = GetComponent<TrackableBehaviour>();
             if (mTrackableBehaviour)
             {
@@ -60,7 +64,6 @@ namespace Vuforia
         }
 
         #endregion // PUBLIC_METHODS
-        public GameObject Canvas;
 
 
         #region PRIVATE_METHODS
@@ -83,11 +86,9 @@ namespace Vuforia
                 component.enabled = true;
             }
 
+            trackableHandler.trackableEnabled(mTrackableBehaviour.TrackableName);
 
-            if(mTrackableBehaviour.TrackableName == "stones")
-            {
-                Canvas.SetActive(true);
-            }
+
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " found");
         }
 
@@ -109,11 +110,9 @@ namespace Vuforia
                 component.enabled = false;
             }
 
+            trackableHandler.trackableDisabled(mTrackableBehaviour.TrackableName);
 
-            if (mTrackableBehaviour.TrackableName == "stones")
-            {
-                Canvas.SetActive(false);
-            }
+
             Debug.Log("Trackable " + mTrackableBehaviour.TrackableName + " lost");
         }
 

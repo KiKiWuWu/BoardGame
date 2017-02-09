@@ -146,10 +146,8 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public virtual void OnUnitSelected()
     {
-        Debug.Log("CHECK IF ACTIONPOINTS ARE AVAILABLE = " + actionsCounter.remainingActionPoints());
         if(actionsCounter.remainingActionPoints() < MovementPoints)
         {
-            Debug.Log("ITTTTT WORRRKKEEEEEDDDD NOW ONLY = " + actionsCounter.remainingActionPoints());
             MovementPoints = actionsCounter.remainingActionPoints();
         }
 
@@ -189,11 +187,11 @@ public abstract class Unit : MonoBehaviour
         if (!IsUnitAttackable(other, Cell))
             return;
 
-        if(actionsCounter.remainingActionPoints() >= 5)
+        if(actionsCounter.checkIfAttackIsPossible())
         {
             MarkAsAttacking(other);
             ActionPoints--;
-            actionsCounter.subtractCostOfActionFromCurrentActionCount(5);
+            actionsCounter.subtractCostOfActionFromCurrentActionCount("attack");
             other.Defend(this, AttackFactor);
 
             if (ActionPoints == 0)
@@ -236,7 +234,7 @@ public abstract class Unit : MonoBehaviour
             return;
 
         MovementPoints -= totalMovementCost;
-        actionsCounter.subtractCostOfActionFromCurrentActionCount(totalMovementCost);
+        actionsCounter.subtractMovementCostFromCurrentActionCount(totalMovementCost);
 
         Cell.IsTaken = false;
         Cell = destinationCell;
