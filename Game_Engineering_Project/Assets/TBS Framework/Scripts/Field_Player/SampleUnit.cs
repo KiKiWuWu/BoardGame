@@ -1,10 +1,11 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SampleUnit : Unit
 {
-    Coroutine PulseCoroutine;
+    //Coroutine PulseCoroutine;
+
+    private CursorOverPlayerController cursorController;
 
 
     public Color LeadingColor;
@@ -13,13 +14,17 @@ public class SampleUnit : Unit
         base.Initialize();
         transform.position += new Vector3(0, 0, -1);
         GetComponent<Renderer>().material.color = LeadingColor;
+        cursorController = GameObject.FindGameObjectWithTag("GameController").GetComponent<CursorOverPlayerController>();
     }
 
     public override void OnUnitDeselected()
     {
         base.OnUnitDeselected();
-        StopCoroutine(PulseCoroutine);
+
+        //StopCoroutine(PulseCoroutine);
+
         transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        cursorController.hidePlayerCursor();
     }
 
     public override void MarkAsAttacking(Unit other)
@@ -68,7 +73,7 @@ public class SampleUnit : Unit
     }
 
 
-
+    /*
     private IEnumerator Pulse(float breakTime, float delay, float scaleFactor)
     {
         var baseScale = transform.localScale;
@@ -91,6 +96,7 @@ public class SampleUnit : Unit
             yield return new WaitForSeconds(breakTime);
         }
     }
+    */
 
 
     //Highlights all allies on the field
@@ -109,7 +115,10 @@ public class SampleUnit : Unit
 
     public override void MarkAsSelected()
     {
-        PulseCoroutine = StartCoroutine(Pulse(0.7f, 0.5f, 1.2f));
+        cursorController.showCursorOverCurrentPlayer(this);
+
+        //PulseCoroutine = StartCoroutine(Pulse(0.7f, 0.5f, 1.2f));
+
 
         //GetComponent<Renderer>().material.color = LeadingColor + Color.green;
     }
