@@ -7,7 +7,7 @@ public class CursorOverPlayerController : MonoBehaviour {
 
     public GameObject CursorOverPlayer;
 
-    private float spinSpeed = 450f;
+    private float spinSpeed = 275f;
     private bool playerSelected = false;
 
 
@@ -22,7 +22,7 @@ public class CursorOverPlayerController : MonoBehaviour {
 
     private void spinCursorOverCharacterHead()
     {
-        CursorOverPlayer.transform.Rotate(Vector3.up, spinSpeed * Time.deltaTime);
+        CursorOverPlayer.transform.Rotate(Vector3.forward, spinSpeed * Time.deltaTime);
     }
 
 
