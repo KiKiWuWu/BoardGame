@@ -128,7 +128,8 @@ public abstract class Unit : MonoBehaviour
         Buffs.FindAll(b => b.Duration == 0).ForEach(b => { b.Undo(this); });
         Buffs.RemoveAll(b => b.Duration == 0);
         Buffs.ForEach(b => { b.Duration--; });
-
+        GUIController.UITopLeft.SetActive(false);
+        GUIController.UITopRight.SetActive(false);
         SetState(new UnitStateNormal(this));
     }
     /// <summary>
@@ -211,6 +212,7 @@ public abstract class Unit : MonoBehaviour
     protected virtual void Defend(Unit other, int damage)
     {
         MarkAsDefending(other);
+        int tempHitpoints = HitPoints;
         HitPoints -= Mathf.Clamp(damage - DefenceFactor, 1, damage);  //Damage is calculated by subtracting attack factor of attacker and defence factor of defender. If result is below 1, it is set to 1.
                                                                       //This behaviour can be overridden in derived classes.
         if (UnitAttacked != null)
@@ -221,6 +223,43 @@ public abstract class Unit : MonoBehaviour
             if (UnitDestroyed != null)
                 UnitDestroyed.Invoke(this, new AttackEventArgs(other, this, damage));
             OnDestroyed();
+        }
+        if (HitPoints > 0)
+        {
+            StartCoroutine(dmgDelay(tempHitpoints, HitPoints, TotalHitPoints));
+           
+            //float HPproc1 = ((float)(HitPoints) / TotalHitPoints) * 100;
+            //GUIController.HPSliderEnemy.value = (float)HPproc1;
+            //GUIController.HPEnemy.text = "" + HitPoints + "/" + TotalHitPoints + " HP";
+        } else
+        {
+            GUIController.UITopRight.SetActive(false);
+             
+        }
+
+        
+       
+    }
+
+    IEnumerator dmgDelay(int previousHitpoints, int currentHitpoints, int maxHitpoints)
+    {
+        float HPproc = ((float)(previousHitpoints) / TotalHitPoints) * 100;
+        GUIController.HPSliderEnemy.value = (float)HPproc;
+        GUIController.HPEnemy.text = "" + previousHitpoints + "/" + TotalHitPoints + " HP";
+
+        int HPLost = previousHitpoints - currentHitpoints;
+        for (int i = 0; i < HPLost; i++)
+        {
+            //print("Time:" + Time.time);
+            yield return new WaitForSeconds((float)0.2);
+            float HPproc1 = ((float)(previousHitpoints-1) / maxHitpoints) * 100;
+            GUIController.HPSliderEnemy.value = (float)HPproc1;
+            GUIController.HPEnemy.text = "" + (previousHitpoints-1) + "/" + maxHitpoints + " HP";
+
+
+            
+            //print("Time:" + Time.time);
+            previousHitpoints--;
         }
     }
 

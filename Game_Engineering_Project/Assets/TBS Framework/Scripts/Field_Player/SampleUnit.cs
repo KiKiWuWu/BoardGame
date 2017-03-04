@@ -1,20 +1,25 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SampleUnit : Unit
 {
     //Coroutine PulseCoroutine;
 
     private CursorOverPlayerController cursorController;
+    private GUIControllerHexa gUIController;
+    private Player player;
 
 
     public Color LeadingColor;
     public override void Initialize()
     {
         base.Initialize();
+        player = gameObject.GetComponent<Player>();
         transform.position += new Vector3(0, 0, -1);
         GetComponent<Renderer>().material.color = LeadingColor;
         cursorController = GameObject.FindGameObjectWithTag("GameController").GetComponent<CursorOverPlayerController>();
+        gUIController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GUIControllerHexa>();
     }
 
     public override void OnUnitDeselected()
@@ -24,27 +29,61 @@ public class SampleUnit : Unit
         //StopCoroutine(PulseCoroutine);
 
         transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        //StartCoroutine(fade(2));
+        //gUIController.UITopLeft.SetActive(false);
+        
         cursorController.hidePlayerCursor();
+
+
+        //gUIController.hidePlayerUI();
     }
 
     public override void MarkAsAttacking(Unit other)
     {
+
         StartCoroutine(Jerk(other, 0.15f));
     }
 
     public override void MarkAsDefending(Unit other)
     {
+     
+        //gUIController.UITopRight.SetActive(true);
         StartCoroutine(Jerk(other, 0.15f));
+        gUIController.UITopRight.SetActive(true);
+        //HitPoints = HitPoints - AttackFactor;
+        print(HitPoints + " HP" + TotalHitPoints + " THP");
+        float HPproc1 = ((float)(HitPoints) / TotalHitPoints) * 100;
+        print("%: "+HPproc1);
+        gUIController.HPSliderEnemy.value = (float)HPproc1;
+        gUIController.HPEnemy.text = "" + (HitPoints - AttackFactor) + "/" + TotalHitPoints + " HP";
+
+        //gUIController.UITopRight.SetActive(false);
     }
 
     public override void MarkAsDestroyed()
     {      
+        
     }
 
     public override void MarkAsFinished()
     {
+      
     }
 
+    /*private IEnumerator fade(float waittime)
+    {
+        float StartTime = Time.time;
+        
+        while (true)
+        {
+            var currentTime = Time.time;
+            if (StartTime + waittime < currentTime)
+                break;
+
+            yield return new WaitForSeconds(3);
+            print("Fade");
+        }
+    }*/
 
     private IEnumerator Jerk(Unit other, float movementTime)
     {
@@ -115,8 +154,29 @@ public class SampleUnit : Unit
 
     public override void MarkAsSelected()
     {
+        gUIController.UITopLeft.SetActive(true);
         cursorController.showCursorOverCurrentPlayer(this);
+       /* if (PlayerNumber == 0)
+        {
+            print("Player: " + PlayerNumber);
+            //gUIController.ImagePlayer.color = new Color32 (255,255,0,255);
+             
+        }
+        else
+        {
+            //gUIController.ImagePlayer.color = Color.red;
+        };
+        */
+        float HPproc = ((float)HitPoints/ TotalHitPoints)* 100;
+        print("HPProc:" + HPproc);
+        
+      /*  if (HPproc < 90)
+        {
+            gUIController.HPSliderPlayer
+        }*/
 
+        gUIController.HPSliderPlayer.value = (float) HPproc; 
+        gUIController.HPPlayer.text = "" + HitPoints+"/"+TotalHitPoints + " HP";
         //PulseCoroutine = StartCoroutine(Pulse(0.7f, 0.5f, 1.2f));
 
 

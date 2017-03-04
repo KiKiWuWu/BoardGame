@@ -6,6 +6,8 @@ public class GUIControllerHexa : MonoBehaviour
 {
     public CellGrid CellGrid;
 
+    public GameObject UITopLeft;
+    public GameObject UITopRight;
     public GameObject Canvas;
     public GameObject ChangeTurnScreen;
     public GameObject EndScreen;
@@ -19,9 +21,21 @@ public class GUIControllerHexa : MonoBehaviour
 
     public Text EndScreenText;
     public Text RemainingActionCountOnScreen;
+    public Text PlayerGold;
     public Text DisplayCostForActionOnScreen;
+    public Text HPPlayer;
+    public Text HPEnemy;
+    public Text RoundCounter;
+
+    public Slider HPSliderPlayer;
+    public Slider HPSliderEnemy;
+
+    public Image ImagePlayer;
+    public Image ImageEnemy;
+
 
     private ActionCount actionsCounter;
+    private int turnCounter;
     private TrackableImageOnScreenHandler trackableHandler;
     private BuffExecuter buffExecuter;
 
@@ -33,9 +47,14 @@ public class GUIControllerHexa : MonoBehaviour
         actionsCounter = gameObject.GetComponent<ActionCount>();
         trackableHandler = gameObject.GetComponent<TrackableImageOnScreenHandler>();
         buffExecuter = gameObject.GetComponent<BuffExecuter>();
-
+        turnCounter = 1;
         CellGrid.TurnEnded += OnTurnEnded;
         CellGrid.GameEnded += OnGameEnded;
+    }
+
+    public void hidePlayerUI()
+    {
+        //PlayerUI.SetActive(false);
     }
 
 
@@ -64,6 +83,7 @@ public class GUIControllerHexa : MonoBehaviour
         }
     }
 
+    
 
     //Shows or hides the activate/cancel buttons of a buff
     private void showOrHideBuffActivateOrCancelButtons()
@@ -118,9 +138,25 @@ public class GUIControllerHexa : MonoBehaviour
     //Updates the remaining action points of the current player
     private void updateActionCountOnScreen()
     {
-        RemainingActionCountOnScreen.text = "" + actionsCounter.getCountOfRemainingActions();
+        RemainingActionCountOnScreen.text = "" + actionsCounter.getCountOfRemainingActions()+"/17";
     }
 
+    /*
+    private void updateGoldCountOnScreen()
+    {
+        //PlayerGold.text = ""+
+    }
+
+    private void updateSelectedUnitLife()
+    {
+        SelectedUnitLife.text = ""+ unit.TotalHitPoints;
+    }
+
+    private void showUITopLeft()
+    {
+        UITopLeft.SetActive(true);
+    }
+    */
 
     //Shows or hides the canvas and a purchased buff 
     private void showOrHideCanvas()
@@ -148,11 +184,18 @@ public class GUIControllerHexa : MonoBehaviour
     //Finises the turn of the current player and restarts the action count
     public void finishTurn()
     {
+        turnCounter++;
+        RoundCounter.text = "Runde" + "\n" + turnCounter;
+        print("Turn: "+turnCounter);
         actionsCounter.restartAvailableActionPoints();
         CellGrid.EndTurn();
     }
 
-
+  /*  public void endTurnMethod()
+    {
+        OnTurnEnded();
+    }
+    */
     //Event is called when the player end his/her turn, a end turn message is shown on the screen
     private void OnTurnEnded(object sender, EventArgs e)
     {
