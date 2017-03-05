@@ -1,89 +1,54 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class SampleUnit : Unit
 {
-    //Coroutine PulseCoroutine;
-
     private CursorOverPlayerController cursorController;
-    private GUIControllerHexa gUIController;
-    private Player player;
-
+    private CharacterSpecialAttackController specialAttackContr;
 
     public Color LeadingColor;
+
+
+
     public override void Initialize()
     {
         base.Initialize();
-        player = gameObject.GetComponent<Player>();
         transform.position += new Vector3(0, 0, -1);
         GetComponent<Renderer>().material.color = LeadingColor;
+
         cursorController = GameObject.FindGameObjectWithTag("GameController").GetComponent<CursorOverPlayerController>();
-        gUIController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GUIControllerHexa>();
+        specialAttackContr = GameObject.FindGameObjectWithTag("GameController").GetComponent<CharacterSpecialAttackController>();
     }
 
     public override void OnUnitDeselected()
     {
         base.OnUnitDeselected();
-
-        //StopCoroutine(PulseCoroutine);
-
         transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
-        //StartCoroutine(fade(2));
-        //gUIController.UITopLeft.SetActive(false);
-        
+             
         cursorController.hidePlayerCursor();
-
-
-        //gUIController.hidePlayerUI();
+        specialAttackContr.setSpecialAttackButtonToDefault();
     }
 
     public override void MarkAsAttacking(Unit other)
     {
-
         StartCoroutine(Jerk(other, 0.15f));
     }
 
     public override void MarkAsDefending(Unit other)
     {
-     
-        //gUIController.UITopRight.SetActive(true);
         StartCoroutine(Jerk(other, 0.15f));
-        gUIController.UITopRight.SetActive(true);
-        //HitPoints = HitPoints - AttackFactor;
-        print(HitPoints + " HP" + TotalHitPoints + " THP");
-        float HPproc1 = ((float)(HitPoints) / TotalHitPoints) * 100;
-        print("%: "+HPproc1);
-        gUIController.HPSliderEnemy.value = (float)HPproc1;
-        gUIController.HPEnemy.text = "" + (HitPoints - AttackFactor) + "/" + TotalHitPoints + " HP";
-
-        //gUIController.UITopRight.SetActive(false);
     }
 
     public override void MarkAsDestroyed()
-    {      
-        
+    { 
     }
+
 
     public override void MarkAsFinished()
     {
-      
+        specialAttackContr.setSpecialAttackButtonToDefault();
     }
 
-    /*private IEnumerator fade(float waittime)
-    {
-        float StartTime = Time.time;
-        
-        while (true)
-        {
-            var currentTime = Time.time;
-            if (StartTime + waittime < currentTime)
-                break;
-
-            yield return new WaitForSeconds(3);
-            print("Fade");
-        }
-    }*/
 
     private IEnumerator Jerk(Unit other, float movementTime)
     {
@@ -112,37 +77,13 @@ public class SampleUnit : Unit
     }
 
 
-    /*
-    private IEnumerator Pulse(float breakTime, float delay, float scaleFactor)
-    {
-        var baseScale = transform.localScale;
-        while (true)
-        {
-            float time1 = Time.time;
-            while (time1 + delay > Time.time)
-            {
-                transform.localScale = Vector3.Lerp(baseScale * scaleFactor, baseScale, (time1 + delay) - Time.time);
-                yield return 0;
-            }
-
-            float time2 = Time.time;
-            while (time2 + delay > Time.time)
-            {
-                transform.localScale = Vector3.Lerp(baseScale, baseScale * scaleFactor, (time2 + delay) - Time.time);
-                yield return 0;
-            }
-
-            yield return new WaitForSeconds(breakTime);
-        }
-    }
-    */
-
 
     //Highlights all allies on the field
     public override void MarkAsFriendly()
     {
         //GetComponent<Renderer>().material.color = LeadingColor + new Color(0.8f, 1, 0.8f);
     }
+
 
     public override void MarkAsReachableEnemy()
     {
@@ -152,35 +93,12 @@ public class SampleUnit : Unit
         //GetComponent<Renderer>().material.color = LeadingColor + Color.red;
     }
 
+
     public override void MarkAsSelected()
     {
-        gUIController.UITopLeft.SetActive(true);
+        specialAttackContr.isSpecialAttackPossibleForCharacter(specialAttackPurchased);
+
         cursorController.showCursorOverCurrentPlayer(this);
-       /* if (PlayerNumber == 0)
-        {
-            print("Player: " + PlayerNumber);
-            //gUIController.ImagePlayer.color = new Color32 (255,255,0,255);
-             
-        }
-        else
-        {
-            //gUIController.ImagePlayer.color = Color.red;
-        };
-        */
-        float HPproc = ((float)HitPoints/ TotalHitPoints)* 100;
-        print("HPProc:" + HPproc);
-        
-      /*  if (HPproc < 90)
-        {
-            gUIController.HPSliderPlayer
-        }*/
-
-        gUIController.HPSliderPlayer.value = (float) HPproc; 
-        gUIController.HPPlayer.text = "" + HitPoints+"/"+TotalHitPoints + " HP";
-        //PulseCoroutine = StartCoroutine(Pulse(0.7f, 0.5f, 1.2f));
-
-
-        //GetComponent<Renderer>().material.color = LeadingColor + Color.green;
     }
 
     //Removes highlighter from the attackable Units

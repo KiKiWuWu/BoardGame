@@ -7,6 +7,8 @@ public class TrackableImageOnScreenHandler : MonoBehaviour
 {
     public Transform SpawnPositionOfActivatedBuffs;
     public GameObject AttackBuff;
+    public GameObject DefenceBuff;
+    public GameObject HealingBuff;
 
     private GameObject currentBuffOnScreen;
     private GameObject createdBuff;
@@ -33,10 +35,22 @@ public class TrackableImageOnScreenHandler : MonoBehaviour
             //canvasState = true;
         }
 
-        if(trackableName == "HealSymbol")
+        if (trackableName == "AttackUpBuff")
         {
             currentBuffOnScreen = AttackBuff;
             buffExecuter.currentActivatedBuff("attack");
+        }
+
+        if (trackableName == "DefenceUpBuff")
+        {
+            currentBuffOnScreen = DefenceBuff;
+            buffExecuter.currentActivatedBuff("defence");
+        }
+
+        if (trackableName == "HealthUpBuff")
+        {
+            currentBuffOnScreen = HealingBuff;
+            buffExecuter.currentActivatedBuff("heal");
         }
     }
 
@@ -54,7 +68,17 @@ public class TrackableImageOnScreenHandler : MonoBehaviour
             //canvasState = false;
         }
 
-        if (trackableName == "HealSymbol")
+        if (trackableName == "AttackUpBuff")
+        {
+            currentBuffOnScreen = null;
+        }
+
+        if (trackableName == "DefenceUpBuff")
+        {
+            currentBuffOnScreen = null;
+        }
+
+        if (trackableName == "HealthUpBuff")
         {
             currentBuffOnScreen = null;
         }
@@ -76,6 +100,7 @@ public class TrackableImageOnScreenHandler : MonoBehaviour
         if(createdBuff != null)
         {
             Destroy(createdBuff);
+            buffExecuter.hideHighlighterWhenBuffActivationIsCanceled();
         }
     }
 

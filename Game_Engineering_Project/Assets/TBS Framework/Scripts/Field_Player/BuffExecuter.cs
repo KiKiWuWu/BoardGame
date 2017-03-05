@@ -17,17 +17,50 @@ public class BuffExecuter : MonoBehaviour
     //Executes the current activated (purchased) buff on units within a list and hides the highlighter on screen of a unit
     public void executeBuffOnSelectedUnits()
     {
-        if(currentBuffOnScreen == "attack")
+        if (currentBuffOnScreen == "attack")
         {
-            AttackBuff attackBuff = new AttackBuff(0, 10);
+            AttackBuff attackBuff = new AttackBuff(0, 3);
             for (int i = 0; i < listWithUnitsToBuff.Count; i++)
             {
                 buffSpawner.SpawnBuff(attackBuff, listWithUnitsToBuff[i]);
-                listWithUnitsToBuff[i].transform.FindChild("BuffHighlighter").gameObject.SetActive(false);
+                hideHighlightFiledOfCharacter();
+            }
+        }
+
+        if (currentBuffOnScreen == "defence")
+        {
+            DefenceBuff defenceBuff = new DefenceBuff(1, 2);
+            for (int i = 0; i < listWithUnitsToBuff.Count; i++)
+            {
+                buffSpawner.SpawnBuff(defenceBuff, listWithUnitsToBuff[i]);
+                hideHighlightFiledOfCharacter();
+            }
+        }
+
+        if (currentBuffOnScreen == "heal")
+        {
+            HealingBuff healBuff = new HealingBuff(0, 5);
+            for (int i = 0; i < listWithUnitsToBuff.Count; i++)
+            {
+                buffSpawner.SpawnBuff(healBuff, listWithUnitsToBuff[i]);
+                hideHighlightFiledOfCharacter();
             }
         }
 
         listWithUnitsToBuff.Clear();
+    }
+
+
+    //Hides the highlighters of the characters which are in the buff area
+    private void hideHighlightFiledOfCharacter()
+    {
+        if (listWithUnitsToBuff.Count > 0)
+        {
+            for (int i = 0; i < listWithUnitsToBuff.Count; i++)
+            {
+                listWithUnitsToBuff[i].transform.FindChild("BuffHighlighter").gameObject.SetActive(false);
+            }
+        }
     }
 
 
@@ -56,5 +89,19 @@ public class BuffExecuter : MonoBehaviour
     public void updateUnitList(List<Unit> unitsList)
     {
         listWithUnitsToBuff = unitsList;
+    }
+
+
+    //Returns the name of the current buff
+    public string nameOfTheCurrentBuff()
+    {
+        return currentBuffOnScreen;
+    }
+
+
+    //Hides the highlighters of the characters which where in the buff area after the buff activation was canceled (called in TrackableImageOnScreenHandler)
+    public void hideHighlighterWhenBuffActivationIsCanceled()
+    {
+        hideHighlightFiledOfCharacter();
     }
 }

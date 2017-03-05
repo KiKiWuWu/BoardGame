@@ -2,20 +2,23 @@
 
 public class ActionCount : MonoBehaviour
 {
-    private static int actionPointsEveryTurn = 17;
+    private static int actionPointsEveryTurn = 20;
     private int currentlyAvailableActionPoints;
 
     private int costOfAttack = 5;
+    private int costOfActivatingSpecialAbilityAttack = 10;
     private int costOfActivatingBuff = 3;
     //private int costOfActivatingSpecialAbility = 5;
 
     private GUIControllerHexa guiController;
+    private CharacterSpecialAttackController specialAttackController;
 
 
     //Function is called on start
     private void Start()
     {
         guiController = gameObject.GetComponent<GUIControllerHexa>();
+        specialAttackController = gameObject.GetComponent<CharacterSpecialAttackController>();
 
         currentlyAvailableActionPoints = actionPointsEveryTurn;
     }
@@ -24,12 +27,22 @@ public class ActionCount : MonoBehaviour
     //Reduces the current action points count and sends the cost number to the GUIController
     public void subtractCostOfActionFromCurrentActionCount(string command)
     {
-        if(command == "attack")
+        if (command == "attack")
         {
-            currentlyAvailableActionPoints -= costOfAttack;
-            guiController.showCostsOnScreen(costOfAttack);
+            int tempAttackCount;
+            if (specialAttackController.specialAttackActivatedByUser())
+            {
+                tempAttackCount = costOfActivatingSpecialAbilityAttack;
+            }
+            else
+            {
+                tempAttackCount = costOfAttack;
+            }
+
+            currentlyAvailableActionPoints -= tempAttackCount;
+            guiController.showCostsOnScreen(tempAttackCount);
         }
-        if(command == "buff")
+        if (command == "buff")
         {
             currentlyAvailableActionPoints -= costOfActivatingBuff;
             guiController.showCostsOnScreen(costOfActivatingBuff);
@@ -51,17 +64,16 @@ public class ActionCount : MonoBehaviour
     }
 
 
-    //Returns the number of current action points of the player (called by Unit class)
-    public int remainingActionPoints()
-    {
-        return currentlyAvailableActionPoints;
-    }
 
 
     //Checks if a attack with the remaining action points is possible (called by Unit class)
     public bool checkIfAttackIsPossible()
     {
-        if(currentlyAvailableActionPoints >= costOfAttack)
+        if (specialAttackController.specialAttackActivatedByUser() && currentlyAvailableActionPoints >= costOfActivatingSpecialAbilityAttack)
+        {
+            return true;
+        }
+        else if (!specialAttackController.specialAttackActivatedByUser() && currentlyAvailableActionPoints >= costOfAttack)
         {
             return true;
         }
@@ -80,6 +92,20 @@ public class ActionCount : MonoBehaviour
     }
 
 
+    //Checks if there are enought remaining action points to activate a special attack (called by CharacterSpecialAttackController class)
+    public bool checkRemainingPointsForSpecialAttack()
+    {
+        if (currentlyAvailableActionPoints >= costOfActivatingSpecialAbilityAttack)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+
     //Checks if there are enought remaining action points to activate a buff (called by GUIControllerHexa class)
     public bool buffActivationPossible()
     {
@@ -91,5 +117,12 @@ public class ActionCount : MonoBehaviour
         {
             return false;
         }
+    }
+
+
+    //Returns the total number of action points
+    public int totalNumberOfActionPoints()
+    {
+        return actionPointsEveryTurn;
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Base class for all units in the game.
@@ -10,7 +11,9 @@ using System.Collections;
 public abstract class Unit : MonoBehaviour
 {
     private ActionCount actionsCounter;
-    private GUIControllerHexa GUIController;
+    private GUIControllerHexa gUIController;
+    private CharacterSpecialAttackController specialAttackController;
+    
 
 
 
@@ -49,6 +52,7 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public Cell Cell { get; set; }
 
+    public bool specialAttackPurchased;
     public int HitPoints;
     public int AttackRange;
     public int AttackFactor;
@@ -85,7 +89,8 @@ public abstract class Unit : MonoBehaviour
     {
         Buffs = new List<Buff>();
         actionsCounter = GameObject.FindGameObjectWithTag("GameController").GetComponent<ActionCount>();
-        GUIController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GUIControllerHexa>();
+        gUIController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GUIControllerHexa>();
+        specialAttackController = GameObject.FindGameObjectWithTag("GameController").GetComponent<CharacterSpecialAttackController>();
 
         UnitState = new UnitStateNormal(this);
 
@@ -96,14 +101,31 @@ public abstract class Unit : MonoBehaviour
 
     protected virtual void OnMouseDown()
     {
-        if (UnitClicked != null)
+        if (UnitClicked != null && EventSystem.current.IsPointerOverGameObject() == false)
             UnitClicked.Invoke(this, new EventArgs());
+
+
+        if (UnitClicked != null && PlayerNumber != gUIController.currentlyActivePlayer() && EventSystem.current.IsPointerOverGameObject() == false)
+        {
+            if(gUIController.currentSelectedEnemyUnit() != this)
+            {
+                gUIController.storeSelectedEnemyUnit(this);
+                gUIController.showHPBarOfSelectedUnit("enemy", this);
+            }
+            else
+            {
+                gUIController.storeSelectedEnemyUnit(null);
+                gUIController.hideHPBarOnScreen("enemy");
+            }
+        }
     }
+
     protected virtual void OnMouseEnter()
     {
         if (UnitHighlighted != null)
             UnitHighlighted.Invoke(this, new EventArgs());
     }
+
     protected virtual void OnMouseExit()
     {
         if (UnitDehighlighted != null)
@@ -128,8 +150,6 @@ public abstract class Unit : MonoBehaviour
         Buffs.FindAll(b => b.Duration == 0).ForEach(b => { b.Undo(this); });
         Buffs.RemoveAll(b => b.Duration == 0);
         Buffs.ForEach(b => { b.Duration--; });
-        GUIController.UITopLeft.SetActive(false);
-        GUIController.UITopRight.SetActive(false);
         SetState(new UnitStateNormal(this));
     }
     /// <summary>
@@ -147,20 +167,25 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public virtual void OnUnitSelected()
     {
-        if(actionsCounter.remainingActionPoints() < MovementPoints)
+        gUIController.showHPBarOfSelectedUnit("foe", this);
+
+        if (actionsCounter.getCountOfRemainingActions() < MovementPoints)
         {
-            MovementPoints = actionsCounter.remainingActionPoints();
+            MovementPoints = actionsCounter.getCountOfRemainingActions();
         }
 
         SetState(new UnitStateMarkedAsSelected(this));
         if (UnitSelected != null)
             UnitSelected.Invoke(this, new EventArgs());
     }
+
     /// <summary>
     /// Method is called when unit is deselected.
     /// </summary>
     public virtual void OnUnitDeselected()
     {
+        gUIController.hideHPBarOnScreen("foe");
+
         SetState(new UnitStateMarkedAsFriendly(this));
         if (UnitDeselected != null)
             UnitDeselected.Invoke(this, new EventArgs());
@@ -188,12 +213,24 @@ public abstract class Unit : MonoBehaviour
         if (!IsUnitAttackable(other, Cell))
             return;
 
-        if(actionsCounter.checkIfAttackIsPossible())
+        if (actionsCounter.checkIfAttackIsPossible())
         {
+            int attackDependingOnState;
+
+            if (specialAttackController.specialAttackActivatedByUser())
+            {
+                attackDependingOnState = AttackFactor + 5;
+            }
+            else
+            {
+                attackDependingOnState = AttackFactor;
+            }
+
+
             MarkAsAttacking(other);
             ActionPoints--;
             actionsCounter.subtractCostOfActionFromCurrentActionCount("attack");
-            other.Defend(this, AttackFactor);
+            other.Defend(this, attackDependingOnState);
 
             if (ActionPoints == 0)
             {
@@ -203,7 +240,7 @@ public abstract class Unit : MonoBehaviour
         }
         else
         {
-            GUIController.showAttackNotPossibleMessage();
+            gUIController.showAttackNotPossibleMessage();
         }
     }
     /// <summary>
@@ -211,8 +248,14 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     protected virtual void Defend(Unit other, int damage)
     {
+        int currentHitpoints = HitPoints;
+
+        if(other != gUIController.currentSelectedEnemyUnit())
+        {
+            gUIController.showHPBarOfSelectedUnit("enemy", other);
+        }
+
         MarkAsDefending(other);
-        int tempHitpoints = HitPoints;
         HitPoints -= Mathf.Clamp(damage - DefenceFactor, 1, damage);  //Damage is calculated by subtracting attack factor of attacker and defence factor of defender. If result is below 1, it is set to 1.
                                                                       //This behaviour can be overridden in derived classes.
         if (UnitAttacked != null)
@@ -224,44 +267,13 @@ public abstract class Unit : MonoBehaviour
                 UnitDestroyed.Invoke(this, new AttackEventArgs(other, this, damage));
             OnDestroyed();
         }
-        if (HitPoints > 0)
+        if (HitPoints >= 0)
         {
-            StartCoroutine(dmgDelay(tempHitpoints, HitPoints, TotalHitPoints));
-           
-            //float HPproc1 = ((float)(HitPoints) / TotalHitPoints) * 100;
-            //GUIController.HPSliderEnemy.value = (float)HPproc1;
-            //GUIController.HPEnemy.text = "" + HitPoints + "/" + TotalHitPoints + " HP";
-        } else
-        {
-            GUIController.UITopRight.SetActive(false);
-             
-        }
-
-        
-       
-    }
-
-    IEnumerator dmgDelay(int previousHitpoints, int currentHitpoints, int maxHitpoints)
-    {
-        float HPproc = ((float)(previousHitpoints) / TotalHitPoints) * 100;
-        GUIController.HPSliderEnemy.value = (float)HPproc;
-        GUIController.HPEnemy.text = "" + previousHitpoints + "/" + TotalHitPoints + " HP";
-
-        int HPLost = previousHitpoints - currentHitpoints;
-        for (int i = 0; i < HPLost; i++)
-        {
-            //print("Time:" + Time.time);
-            yield return new WaitForSeconds((float)0.2);
-            float HPproc1 = ((float)(previousHitpoints-1) / maxHitpoints) * 100;
-            GUIController.HPSliderEnemy.value = (float)HPproc1;
-            GUIController.HPEnemy.text = "" + (previousHitpoints-1) + "/" + maxHitpoints + " HP";
-
-
-            
-            //print("Time:" + Time.time);
-            previousHitpoints--;
+            gUIController.showDamageInHPBar(currentHitpoints, HitPoints, TotalHitPoints);
         }
     }
+
+
 
     public virtual void Move(Cell destinationCell, List<Cell> path)
     {
@@ -287,6 +299,8 @@ public abstract class Unit : MonoBehaviour
         if (UnitMoved != null)
             UnitMoved.Invoke(this, new MovementEventArgs(Cell, destinationCell, path));    
     }
+
+
     protected virtual IEnumerator MovementAnimation(List<Cell> path)
     {
         isMoving = true;

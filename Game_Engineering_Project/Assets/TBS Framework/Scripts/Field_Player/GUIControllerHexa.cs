@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,9 +19,11 @@ public class GUIControllerHexa : MonoBehaviour
 
     public Button BuffPurchaseButton;
     public Button ActivateBuffButton;
+    public Button ActivateSpecialAttackButton;
 
     public Text EndScreenText;
     public Text RemainingActionCountOnScreen;
+    public Text ExecutedBuffTextOnScreen;
     public Text PlayerGold;
     public Text DisplayCostForActionOnScreen;
     public Text HPPlayer;
@@ -33,11 +36,15 @@ public class GUIControllerHexa : MonoBehaviour
     public Image ImagePlayer;
     public Image ImageEnemy;
 
+    private int turnCounter;
+    private int currentActivePlayer;
+    private Unit selectedEnemyUnit;
+
 
     private ActionCount actionsCounter;
-    private int turnCounter;
     private TrackableImageOnScreenHandler trackableHandler;
     private BuffExecuter buffExecuter;
+    private CharacterSpecialAttackController specialAttackController;
 
 
 
@@ -47,14 +54,12 @@ public class GUIControllerHexa : MonoBehaviour
         actionsCounter = gameObject.GetComponent<ActionCount>();
         trackableHandler = gameObject.GetComponent<TrackableImageOnScreenHandler>();
         buffExecuter = gameObject.GetComponent<BuffExecuter>();
+        specialAttackController = gameObject.GetComponent<CharacterSpecialAttackController>();
+
         turnCounter = 1;
+        currentActivePlayer = CellGrid.CurrentPlayerNumber;
         CellGrid.TurnEnded += OnTurnEnded;
         CellGrid.GameEnded += OnGameEnded;
-    }
-
-    public void hidePlayerUI()
-    {
-        //PlayerUI.SetActive(false);
     }
 
 
@@ -67,6 +72,21 @@ public class GUIControllerHexa : MonoBehaviour
         checkIfBuffPurchaseIsPossible();
         showOrHideBuffActivateOrCancelButtons();
         checkIfUnitsAreInBuffArea();
+        checkInteractabilityOfSpecialAttackButton();
+    }
+
+
+    //Checks if the special attack button should be set to interactable or not interactable
+    private void checkInteractabilityOfSpecialAttackButton()
+    {
+        if (specialAttackController.specialAttackButtonInteractable())
+        {
+            ActivateSpecialAttackButton.interactable = true;
+        }
+        else
+        {
+            ActivateSpecialAttackButton.interactable = false;
+        }
     }
 
 
@@ -84,7 +104,6 @@ public class GUIControllerHexa : MonoBehaviour
     }
 
     
-
     //Shows or hides the activate/cancel buttons of a buff
     private void showOrHideBuffActivateOrCancelButtons()
     {
@@ -138,7 +157,7 @@ public class GUIControllerHexa : MonoBehaviour
     //Updates the remaining action points of the current player
     private void updateActionCountOnScreen()
     {
-        RemainingActionCountOnScreen.text = "" + actionsCounter.getCountOfRemainingActions()+"/17";
+        RemainingActionCountOnScreen.text = "" + actionsCounter.getCountOfRemainingActions() + " / " + actionsCounter.totalNumberOfActionPoints();
     }
 
     /*
@@ -189,19 +208,21 @@ public class GUIControllerHexa : MonoBehaviour
         print("Turn: "+turnCounter);
         actionsCounter.restartAvailableActionPoints();
         CellGrid.EndTurn();
+
+        currentActivePlayer = CellGrid.CurrentPlayerNumber;
     }
 
-  /*  public void endTurnMethod()
-    {
-        OnTurnEnded();
-    }
-    */
+
     //Event is called when the player end his/her turn, a end turn message is shown on the screen
     private void OnTurnEnded(object sender, EventArgs e)
     {
         if((sender as CellGrid).CurrentPlayer is HumanPlayer)
         {
+            UITopLeft.SetActive(false);
+            UITopRight.SetActive(false);
             ChangeTurnScreen.SetActive(true);
+
+            specialAttackController.setSpecialAttackButtonToDefault();
 
             Invoke("ShowOrHideNextTurnMessege", 1);
         }
@@ -268,9 +289,9 @@ public class GUIControllerHexa : MonoBehaviour
     //Shows a message on screen that a buff was activated
     public void showBuffActivatedMessage()
     {
+        setBuffMessageOnScreen();
         BuffScreen.SetActive(true);
         Invoke("hideBuffScreenInformation", 1);
-
     }
 
 
@@ -278,5 +299,121 @@ public class GUIControllerHexa : MonoBehaviour
     private void hideBuffScreenInformation()
     {
         BuffScreen.SetActive(false);
+    }
+
+
+    //Gets the name of the activated buff and changes the text on screen
+    private void setBuffMessageOnScreen()
+    {
+        string activatedBuffMessage = "";
+
+        if (buffExecuter.nameOfTheCurrentBuff() == "attack")
+        {
+            activatedBuffMessage = "Die Angriffskraft wurde erhöht!";
+        }
+
+        if (buffExecuter.nameOfTheCurrentBuff() == "defence")
+        {
+            activatedBuffMessage = "Die Verteidigung wurde erhöht!";
+        }
+
+        if (buffExecuter.nameOfTheCurrentBuff() == "heal")
+        {
+            activatedBuffMessage = "Eine Heilung wurde aktiviert!";
+        }
+
+        ExecutedBuffTextOnScreen.text = activatedBuffMessage;
+    }
+
+
+    //
+    public void showDamageInHPBar(int tempHitpoints, int HitPoints, int TotalHitPoints)
+    {
+        StartCoroutine(dmgDelay(tempHitpoints, HitPoints, TotalHitPoints));
+    }
+
+
+    //
+    private IEnumerator dmgDelay(int previousHitpoints, int currentHitpoints, int maxHitpoints)
+    {
+        float HPproc = ((float)(previousHitpoints) / maxHitpoints) * 100;
+        HPSliderEnemy.value = (float)HPproc;
+        HPEnemy.text = "" + previousHitpoints + "/" + maxHitpoints + " HP";
+
+        int HPLost = previousHitpoints - currentHitpoints;
+        for (int i = 0; i < HPLost; i++)
+        {
+            //print("Time:" + Time.time);
+            yield return new WaitForSeconds(0.03f);
+            float HPproc1 = ((float)(previousHitpoints - 1) / maxHitpoints) * 100;
+            HPSliderEnemy.value = (float)HPproc1;
+            HPEnemy.text = "" + (previousHitpoints - 1) + "/" + maxHitpoints + " HP";
+
+
+            //print("Time:" + Time.time);
+            previousHitpoints--;
+        }
+        if(currentHitpoints <= 0)
+        {
+            UITopRight.SetActive(false);
+        }
+    }
+
+
+    //Shows the health bar of a foe or enemy on screen with given parameters (called by Unit class)
+    public void showHPBarOfSelectedUnit(string unitFraction, Unit selectedUnit)
+    {
+        float HPInProcent = ((float)selectedUnit.HitPoints / selectedUnit.TotalHitPoints) * 100;
+        string healthPointsText = "" + selectedUnit.HitPoints + "/" + selectedUnit.TotalHitPoints + " HP";
+
+        if (unitFraction == "foe")
+        {
+            UITopLeft.SetActive(true);
+            HPSliderPlayer.value = HPInProcent;
+            HPPlayer.text = healthPointsText;
+        }
+
+        if (unitFraction == "enemy")
+        {
+            UITopRight.SetActive(true);
+            HPSliderEnemy.value = HPInProcent;
+            HPEnemy.text = healthPointsText;
+        }
+    }
+
+
+    //Hides the HP bar of the current selected character or the selected enemy unit (called by SampleUnit class)
+    public void hideHPBarOnScreen(string unitFraction)
+    {
+        if(unitFraction == "foe")
+        {
+            UITopLeft.SetActive(false);
+        }
+
+        if(unitFraction == "enemy")
+        {
+            UITopRight.SetActive(false);
+        }
+    }
+
+
+    //Return number of the player who is currently active (called by Unit class)
+    public int currentlyActivePlayer()
+    {
+        return currentActivePlayer;
+    }
+
+
+    //Returns the enemy unit which HP bar is currently displayed on screen
+    public Unit currentSelectedEnemyUnit()
+    {
+        return selectedEnemyUnit;
+    }
+
+
+    //Stores the selected enemy Unit
+    public void storeSelectedEnemyUnit(Unit selectedEnemy)
+    {
+        selectedEnemyUnit = selectedEnemy;
     }
 }
