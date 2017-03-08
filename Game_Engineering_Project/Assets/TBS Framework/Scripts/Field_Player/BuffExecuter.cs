@@ -23,7 +23,7 @@ public class BuffExecuter : MonoBehaviour
             for (int i = 0; i < listWithUnitsToBuff.Count; i++)
             {
                 buffSpawner.SpawnBuff(attackBuff, listWithUnitsToBuff[i]);
-                hideHighlightFiledOfCharacter();
+                hideHighlightFieldOfCharacter();
             }
         }
 
@@ -33,7 +33,7 @@ public class BuffExecuter : MonoBehaviour
             for (int i = 0; i < listWithUnitsToBuff.Count; i++)
             {
                 buffSpawner.SpawnBuff(defenceBuff, listWithUnitsToBuff[i]);
-                hideHighlightFiledOfCharacter();
+                hideHighlightFieldOfCharacter();
             }
         }
 
@@ -43,16 +43,25 @@ public class BuffExecuter : MonoBehaviour
             for (int i = 0; i < listWithUnitsToBuff.Count; i++)
             {
                 buffSpawner.SpawnBuff(healBuff, listWithUnitsToBuff[i]);
-                hideHighlightFiledOfCharacter();
+                hideHighlightFieldOfCharacter();
             }
         }
+        clearListOfUnits();
+    }
 
-        listWithUnitsToBuff.Clear();
+
+    //Clears the list of units
+    private void clearListOfUnits()
+    {
+        if(listWithUnitsToBuff.Count > 0)
+        {
+            listWithUnitsToBuff.Clear();
+        }
     }
 
 
     //Hides the highlighters of the characters which are in the buff area
-    private void hideHighlightFiledOfCharacter()
+    private void hideHighlightFieldOfCharacter()
     {
         if (listWithUnitsToBuff.Count > 0)
         {
@@ -102,6 +111,7 @@ public class BuffExecuter : MonoBehaviour
     //Hides the highlighters of the characters which where in the buff area after the buff activation was canceled (called in TrackableImageOnScreenHandler)
     public void hideHighlighterWhenBuffActivationIsCanceled()
     {
-        hideHighlightFiledOfCharacter();
+        hideHighlightFieldOfCharacter();
+        clearListOfUnits();
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TrackableImageOnScreenHandler : MonoBehaviour
 {
@@ -12,8 +9,7 @@ public class TrackableImageOnScreenHandler : MonoBehaviour
 
     private GameObject currentBuffOnScreen;
     private GameObject createdBuff;
-
-    //private bool canvasState = false;
+    
     private int numberOfDisplayedImageTargets = 0;
     private BuffExecuter buffExecuter;
 
@@ -29,12 +25,7 @@ public class TrackableImageOnScreenHandler : MonoBehaviour
     public void trackableEnabled(string trackableName)
     {
         numberOfDisplayedImageTargets++;
-
-        if (trackableName == "stones")
-        {
-            //canvasState = true;
-        }
-
+        
         if (trackableName == "AttackUpBuff")
         {
             currentBuffOnScreen = AttackBuff;
@@ -61,11 +52,6 @@ public class TrackableImageOnScreenHandler : MonoBehaviour
         if (numberOfDisplayedImageTargets > 0)
         {
             numberOfDisplayedImageTargets--;
-        }
-            
-        if (trackableName == "stones")
-        {
-            //canvasState = false;
         }
 
         if (trackableName == "AttackUpBuff")
@@ -160,6 +146,5 @@ public class TrackableImageOnScreenHandler : MonoBehaviour
         {
             return false;
         }
-        //return canvasState;
     }
 }

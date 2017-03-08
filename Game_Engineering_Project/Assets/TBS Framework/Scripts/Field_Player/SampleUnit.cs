@@ -3,10 +3,12 @@ using UnityEngine;
 
 public class SampleUnit : Unit
 {
-    private CursorOverPlayerController cursorController;
+    private GUIControllerHexa GUIController;
     private CharacterSpecialAttackController specialAttackContr;
+    private AllUnitsController unitController;
 
     public Color LeadingColor;
+    public bool temp = false;
 
 
 
@@ -16,21 +18,33 @@ public class SampleUnit : Unit
         transform.position += new Vector3(0, 0, -1);
         GetComponent<Renderer>().material.color = LeadingColor;
 
-        cursorController = GameObject.FindGameObjectWithTag("GameController").GetComponent<CursorOverPlayerController>();
+        GUIController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GUIControllerHexa>();
         specialAttackContr = GameObject.FindGameObjectWithTag("GameController").GetComponent<CharacterSpecialAttackController>();
+        unitController = GameObject.FindGameObjectWithTag("GameController").GetComponent<AllUnitsController>();
     }
 
     public override void OnUnitDeselected()
     {
+        if (unitController.enemyIsBeingAttacked)
+        {
+            unitController.enemyIsBeingAttacked = false;
+        }
+        else
+        {
+            unitController.selectedAlliedUnitByPlayer(null);
+            GUIController.hideHPBarOnScreen("friend");
+        }
+
         base.OnUnitDeselected();
         transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
              
-        cursorController.hidePlayerCursor();
+        GUIController.hideSpecialAttackButtonArea();
         specialAttackContr.setSpecialAttackButtonToDefault();
     }
 
     public override void MarkAsAttacking(Unit other)
     {
+        unitController.enemyIsBeingAttacked = true;
         StartCoroutine(Jerk(other, 0.15f));
     }
 
@@ -41,12 +55,13 @@ public class SampleUnit : Unit
 
     public override void MarkAsDestroyed()
     { 
+
     }
 
 
     public override void MarkAsFinished()
     {
-        specialAttackContr.setSpecialAttackButtonToDefault();
+        //specialAttackContr.setSpecialAttackButtonToDefault();
     }
 
 
@@ -96,9 +111,10 @@ public class SampleUnit : Unit
 
     public override void MarkAsSelected()
     {
-        specialAttackContr.isSpecialAttackPossibleForCharacter(specialAttackPurchased);
-
-        cursorController.showCursorOverCurrentPlayer(this);
+        unitController.selectedAlliedUnitByPlayer(this);
+        GUIController.showHPBarOfSelectedUnit("friend", HitPoints, TotalHitPoints);
+        
+        GUIController.showSpecialAttackButtonArea();
     }
 
     //Removes highlighter from the attackable Units

@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 /// <summary>
 /// Applies buffs to units. It requires unit parent game object to be named "Units" to work.
@@ -14,6 +13,5 @@ public class BuffSpawner
             var _buff = buff.Clone();
             unit.Buffs.Add(_buff);
             _buff.Apply(unit);
-        
     }
 }

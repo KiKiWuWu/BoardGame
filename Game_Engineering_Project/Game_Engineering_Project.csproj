@@ -78,8 +78,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Created Input\Scripts\EndGameFunctions.cs" />
-    <Compile Include="Assets\Created Input\Scripts\TestCollider.cs" />
     <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanDestroy.cs" />
     <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanDragLine.cs" />
     <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanDragTrail.cs" />
@@ -155,20 +153,22 @@
     <Compile Include="Assets\TBS Framework\Scripts\Core\UnitStateMarkedAsSelected.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Core\UnitStateNormal.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\ActionCount.cs" />
+    <Compile Include="Assets\TBS Framework\Scripts\Field_Player\AllUnitsController.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\AttackBuff.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\BuffCollider.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\BuffExecuter.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\BuffSpawner.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\Field_Player\ButtonController.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\CharacterSpecialAttackController.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\CursorOverPlayerController.cs" />
+    <Compile Include="Assets\TBS Framework\Scripts\Field_Player\DefenceBuff.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\FieldPositionController.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\GUIControllerHexa.cs" />
+    <Compile Include="Assets\TBS Framework\Scripts\Field_Player\GoldController.cs" />
+    <Compile Include="Assets\TBS Framework\Scripts\Field_Player\HealingBuff.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\MyHexagon.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\SampleUnit.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\TrackableImageOnScreenHandler.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\Tutorial\DefenceBuff.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\Tutorial\HealingBuff.cs" />
+    <Compile Include="Assets\TBS Framework\Scripts\Field_Player\TurnCounter.cs" />
     <Compile Include="Assets\Vuforia\Scripts\BackgroundPlaneBehaviour.cs" />
     <Compile Include="Assets\Vuforia\Scripts\CloudRecoBehaviour.cs" />
     <Compile Include="Assets\Vuforia\Scripts\CylinderTargetBehaviour.cs" />

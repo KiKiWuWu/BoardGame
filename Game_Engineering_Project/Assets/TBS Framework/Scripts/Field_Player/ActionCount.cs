@@ -8,7 +8,6 @@ public class ActionCount : MonoBehaviour
     private int costOfAttack = 5;
     private int costOfActivatingSpecialAbilityAttack = 10;
     private int costOfActivatingBuff = 3;
-    //private int costOfActivatingSpecialAbility = 5;
 
     private GUIControllerHexa guiController;
     private CharacterSpecialAttackController specialAttackController;
@@ -62,8 +61,6 @@ public class ActionCount : MonoBehaviour
     {
         return currentlyAvailableActionPoints;
     }
-
-
 
 
     //Checks if a attack with the remaining action points is possible (called by Unit class)

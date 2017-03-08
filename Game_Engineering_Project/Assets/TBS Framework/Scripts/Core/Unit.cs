@@ -13,8 +13,9 @@ public abstract class Unit : MonoBehaviour
     private ActionCount actionsCounter;
     private GUIControllerHexa gUIController;
     private CharacterSpecialAttackController specialAttackController;
-    
+    private AllUnitsController allUnitsController;
 
+    private bool attackCurrentlyInProgress = false;
 
 
     /// <summary>
@@ -91,6 +92,7 @@ public abstract class Unit : MonoBehaviour
         actionsCounter = GameObject.FindGameObjectWithTag("GameController").GetComponent<ActionCount>();
         gUIController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GUIControllerHexa>();
         specialAttackController = GameObject.FindGameObjectWithTag("GameController").GetComponent<CharacterSpecialAttackController>();
+        allUnitsController = GameObject.FindGameObjectWithTag("GameController").GetComponent<AllUnitsController>();
 
         UnitState = new UnitStateNormal(this);
 
@@ -99,26 +101,37 @@ public abstract class Unit : MonoBehaviour
         TotalMovementPoints = MovementPoints;
     }
 
+
     protected virtual void OnMouseDown()
     {
         if (UnitClicked != null && EventSystem.current.IsPointerOverGameObject() == false)
             UnitClicked.Invoke(this, new EventArgs());
 
 
-        if (UnitClicked != null && PlayerNumber != gUIController.currentlyActivePlayer() && EventSystem.current.IsPointerOverGameObject() == false)
+        if (UnitClicked != null && PlayerNumber != allUnitsController.activePlayer() && EventSystem.current.IsPointerOverGameObject() == false)
         {
-            if(gUIController.currentSelectedEnemyUnit() != this)
+            if(allUnitsController.currentlySelectedEnemyUnit() != this)
             {
-                gUIController.storeSelectedEnemyUnit(this);
-                gUIController.showHPBarOfSelectedUnit("enemy", this);
+                allUnitsController.selectedEnemyUnitByPlayer(this);
+
+                if (attackCurrentlyInProgress)
+                {
+                    gUIController.showHPBarOfSelectedUnit("attackOnEnemy", 0, 0);
+                    attackCurrentlyInProgress = false;
+                }
+                else
+                {
+                    gUIController.showHPBarOfSelectedUnit("enemy", HitPoints, TotalHitPoints);
+                }
             }
-            else
+            else if(allUnitsController.currentlySelectedEnemyUnit() == this && !attackCurrentlyInProgress)
             {
-                gUIController.storeSelectedEnemyUnit(null);
+                allUnitsController.selectedEnemyUnitByPlayer(null);
                 gUIController.hideHPBarOnScreen("enemy");
             }
         }
     }
+
 
     protected virtual void OnMouseEnter()
     {
@@ -126,11 +139,13 @@ public abstract class Unit : MonoBehaviour
             UnitHighlighted.Invoke(this, new EventArgs());
     }
 
+
     protected virtual void OnMouseExit()
     {
         if (UnitDehighlighted != null)
             UnitDehighlighted.Invoke(this, new EventArgs());
     }
+
 
     /// <summary>
     /// Method is called at the start of each turn.
@@ -142,6 +157,7 @@ public abstract class Unit : MonoBehaviour
 
         SetState(new UnitStateMarkedAsFriendly(this));
     }
+
     /// <summary>
     /// Method is called at the end of each turn.
     /// </summary>
@@ -152,6 +168,7 @@ public abstract class Unit : MonoBehaviour
         Buffs.ForEach(b => { b.Duration--; });
         SetState(new UnitStateNormal(this));
     }
+
     /// <summary>
     /// Method is called when units HP drops below 1.
     /// </summary>
@@ -167,8 +184,6 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public virtual void OnUnitSelected()
     {
-        gUIController.showHPBarOfSelectedUnit("foe", this);
-
         if (actionsCounter.getCountOfRemainingActions() < MovementPoints)
         {
             MovementPoints = actionsCounter.getCountOfRemainingActions();
@@ -184,8 +199,6 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public virtual void OnUnitDeselected()
     {
-        gUIController.hideHPBarOnScreen("foe");
-
         SetState(new UnitStateMarkedAsFriendly(this));
         if (UnitDeselected != null)
             UnitDeselected.Invoke(this, new EventArgs());
@@ -197,10 +210,15 @@ public abstract class Unit : MonoBehaviour
     public virtual bool IsUnitAttackable(Unit other, Cell sourceCell)
     {
         if (sourceCell.GetDistance(other.Cell) <= AttackRange)
+        {            
             return true;
-
-        return false;
+        }
+        else
+        {
+            return false;
+        } 
     }
+
     /// <summary>
     /// Method deals damage to unit given as parameter.
     /// </summary>
@@ -243,18 +261,15 @@ public abstract class Unit : MonoBehaviour
             gUIController.showAttackNotPossibleMessage();
         }
     }
+
     /// <summary>
     /// Attacking unit calls Defend method on defending unit. 
     /// </summary>
     protected virtual void Defend(Unit other, int damage)
     {
         int currentHitpoints = HitPoints;
-
-        if(other != gUIController.currentSelectedEnemyUnit())
-        {
-            gUIController.showHPBarOfSelectedUnit("enemy", other);
-        }
-
+        attackCurrentlyInProgress = true;
+        
         MarkAsDefending(other);
         HitPoints -= Mathf.Clamp(damage - DefenceFactor, 1, damage);  //Damage is calculated by subtracting attack factor of attacker and defence factor of defender. If result is below 1, it is set to 1.
                                                                       //This behaviour can be overridden in derived classes.
@@ -263,6 +278,7 @@ public abstract class Unit : MonoBehaviour
 
         if (HitPoints <= 0)
         {
+            gUIController.showDamageInHPBar(currentHitpoints, 0, TotalHitPoints);
             if (UnitDestroyed != null)
                 UnitDestroyed.Invoke(this, new AttackEventArgs(other, this, damage));
             OnDestroyed();
@@ -272,7 +288,6 @@ public abstract class Unit : MonoBehaviour
             gUIController.showDamageInHPBar(currentHitpoints, HitPoints, TotalHitPoints);
         }
     }
-
 
 
     public virtual void Move(Cell destinationCell, List<Cell> path)
@@ -325,6 +340,7 @@ public abstract class Unit : MonoBehaviour
     {
         return !cell.IsTaken;
     }
+
     /// <summary>
     /// Method indicates if unit is capable of moving through cell given as parameter.
     /// </summary>
@@ -332,6 +348,7 @@ public abstract class Unit : MonoBehaviour
     {
         return !cell.IsTaken;
     }
+
     /// <summary>
     /// Method returns all cells that the unit is capable of moving to.
     /// </summary>
@@ -359,6 +376,7 @@ public abstract class Unit : MonoBehaviour
     {
         return _pathfinder.FindPath(GetGraphEdges(cells), Cell, destination);
     }
+
     /// <summary>
     /// Method returns graph representation of cell grid for pathfinding.
     /// </summary>
