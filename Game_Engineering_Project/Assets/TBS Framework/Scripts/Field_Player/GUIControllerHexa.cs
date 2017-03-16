@@ -17,13 +17,17 @@ public class GUIControllerHexa : MonoBehaviour
     public GameObject ActivateBuffButtonOnScreen;
     public GameObject SpecialAttackNotPossibleScreen;
     public GameObject NotEnoughtGoldToExecuteBuffScreen;
+    public GameObject CastleInformationScreen;
     public GameObject ActivateOrCancelBuffButtons;
     public GameObject SpecialAttackButtonsArea;
+    public GameObject CastleButtonsArea;
 
     public Button BuffPurchaseButton;
     public Button ActivateBuffButton;
     public Button ActivateSpecialAttackButton;
     public Button PurchaseSpecialAttackButton;
+    public Button NeutralizeCastleButton;
+    public Button ConquerCastleButton;
 
     public Text EndScreenText;
     public Text RemainingActionCountOnScreen;
@@ -33,6 +37,7 @@ public class GUIControllerHexa : MonoBehaviour
     public Text HPEnemy;
     public Text RoundCounter;
     public Text GoldCountOnScreen;
+    public Text CastleInformationText;
 
     public Slider HPSliderPlayer;
     public Slider HPSliderEnemy;
@@ -72,13 +77,52 @@ public class GUIControllerHexa : MonoBehaviour
     {
         showOrHideCanvas();
         updateActionCountOnScreen();
-        showOrHideBuffPurchaseButton();
-        checkIfBuffPurchaseIsPossible();
+        checkInteractabilityOfBuffButton();
+        //showOrHideBuffPurchaseButton();
+        //checkIfBuffPurchaseIsPossible();
         showOrHideBuffActivateOrCancelButtons();
         checkIfUnitsAreInBuffArea();
         updateGoldCountOnScreen();
-
         checkInteractabilityOfSpecialAttackButton();
+
+        checkIfCharacterStandsOnACastle();
+    }
+
+
+    //Checks if a character is standing on a castle and shows buttons depending on the occupation state of the castle
+    private void checkIfCharacterStandsOnACastle()
+    {
+        if (unitController.currentlySelectedAlliedUnit() != null && unitController.currentlySelectedAlliedUnit().standOnCastle != null)
+        {
+            if (unitController.currentlySelectedAlliedUnit().standOnCastle.occupiedStateOfCastle(unitController.activePlayer()) == "neutralize")
+            {
+                ConquerCastleButton.gameObject.SetActive(false);
+                NeutralizeCastleButton.gameObject.SetActive(true);
+                //print("SHOWWWW NEUTRALIZZEEE");
+            }
+
+            if (unitController.currentlySelectedAlliedUnit().standOnCastle.occupiedStateOfCastle(unitController.activePlayer()) == "conquer")
+            {
+                NeutralizeCastleButton.gameObject.SetActive(false);
+                ConquerCastleButton.gameObject.SetActive(true);
+                ConquerCastleButton.interactable = true;
+                //print("SHOWWWW CONQUEEERRRRRR");
+            }
+
+            if (unitController.currentlySelectedAlliedUnit().standOnCastle.occupiedStateOfCastle(unitController.activePlayer()) == "conquered")
+            {
+                NeutralizeCastleButton.gameObject.SetActive(false);
+                ConquerCastleButton.gameObject.SetActive(true);
+                ConquerCastleButton.interactable = false;
+                //print("ALREADDYYY CONQUEEREDDD");
+            }
+
+            CastleButtonsArea.SetActive(true);
+        }
+        else
+        {
+            CastleButtonsArea.SetActive(false);
+        }
     }
 
 
@@ -187,6 +231,20 @@ public class GUIControllerHexa : MonoBehaviour
     }
 
 
+    //Checks the interactability of the buff purchase button
+    private void checkInteractabilityOfBuffButton()
+    {
+        if (trackableHandler.buffTrackableImagePresent() && !trackableHandler.buffPurchased())
+        {
+            BuffPurchaseButton.interactable = true;
+        }
+        else
+        {
+            BuffPurchaseButton.interactable = false;
+        }
+    }
+
+
     //Shows or hides the purches button of a buff if buff is shown or not shown
     private void showOrHideBuffPurchaseButton()
     {
@@ -241,8 +299,9 @@ public class GUIControllerHexa : MonoBehaviour
 
         unitController.selectedEnemyUnitByPlayer(null);
 
+        goldController.addGoldForEveryOccupiedCastleToPlayersGoldCount();
         unitController.changeCurrentActivePlayer();
-        goldController.addGoldToPlayersGoldCount();
+        goldController.addTurnGoldToPlayersGoldCount();
     }
 
 
@@ -370,6 +429,28 @@ public class GUIControllerHexa : MonoBehaviour
     }
 
 
+    //Shows a message on screen depending on the state of castle an remaining action points
+    public void showMessageOnScreenAboutCastleState(string command)
+    {
+        if(command == "castleNeutralized")
+        {
+            CastleInformationText.text = "Die Burg wurde erfolgreich neutralisiert!";
+        }
+
+        if(command == "castleOccupied")
+        {
+            CastleInformationText.text = "Die Burg wurde erfolgreich eingenommen!";
+        }
+
+        if(command == "notEnoughtPoints")
+        {
+            CastleInformationText.text = "Sie haben nicht genug Aktionspunkte!";
+        }
+
+        CastleInformationScreen.SetActive(true);
+    }
+
+
     //Start a coroutine that reduces the health points of the attacked enemy
     public void showDamageInHPBar(int tempHitpoints, int HitPoints, int TotalHitPoints)
     {
@@ -430,7 +511,7 @@ public class GUIControllerHexa : MonoBehaviour
     //Hides the HP bar of the current selected character or the selected enemy unit (called by SampleUnit class)
     public void hideHPBarOnScreen(string unitFraction)
     {
-        if(unitFraction == "foe")
+        if(unitFraction == "friend")
         {
             UITopLeft.SetActive(false);
         }

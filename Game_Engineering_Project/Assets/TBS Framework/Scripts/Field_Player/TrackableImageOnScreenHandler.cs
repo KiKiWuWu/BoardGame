@@ -11,6 +11,8 @@ public class TrackableImageOnScreenHandler : MonoBehaviour
     private GameObject createdBuff;
     
     private int numberOfDisplayedImageTargets = 0;
+    private bool buffTrackableOnScreen = false;
+
     private BuffExecuter buffExecuter;
 
 
@@ -43,6 +45,11 @@ public class TrackableImageOnScreenHandler : MonoBehaviour
             currentBuffOnScreen = HealingBuff;
             buffExecuter.currentActivatedBuff("heal");
         }
+
+        if(trackableName != "stones")
+        {
+            buffTrackableOnScreen = true;
+        }
     }
 
 
@@ -67,6 +74,11 @@ public class TrackableImageOnScreenHandler : MonoBehaviour
         if (trackableName == "HealthUpBuff")
         {
             currentBuffOnScreen = null;
+        }
+
+        if (trackableName != "stones")
+        {
+            buffTrackableOnScreen = false;
         }
     }
 
@@ -146,5 +158,12 @@ public class TrackableImageOnScreenHandler : MonoBehaviour
         {
             return false;
         }
+    }
+
+
+    //Return true or false if a buff trackable image is displayed before the camera
+    public bool buffTrackableImagePresent()
+    {
+        return buffTrackableOnScreen;
     }
 }

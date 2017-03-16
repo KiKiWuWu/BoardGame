@@ -25,9 +25,9 @@ public class SampleUnit : Unit
 
     public override void OnUnitDeselected()
     {
-        if (unitController.enemyIsBeingAttacked)
+        if (unitController.isAttackCurrentlyPerformed())
         {
-            unitController.enemyIsBeingAttacked = false;
+            unitController.stateOnAttack(false);
         }
         else
         {
@@ -44,7 +44,7 @@ public class SampleUnit : Unit
 
     public override void MarkAsAttacking(Unit other)
     {
-        unitController.enemyIsBeingAttacked = true;
+        unitController.stateOnAttack(true);
         StartCoroutine(Jerk(other, 0.15f));
     }
 

@@ -17,6 +17,8 @@ public abstract class Unit : MonoBehaviour
 
     private bool attackCurrentlyInProgress = false;
 
+    public MyCastle standOnCastle;
+
 
     /// <summary>
     /// UnitClicked event is invoked when user clicks the unit. It requires a collider on the unit game object to work.
@@ -52,7 +54,7 @@ public abstract class Unit : MonoBehaviour
     /// Cell that the unit is currently occupying.
     /// </summary>
     public Cell Cell { get; set; }
-
+    
     public bool specialAttackPurchased;
     public int HitPoints;
     public int AttackRange;

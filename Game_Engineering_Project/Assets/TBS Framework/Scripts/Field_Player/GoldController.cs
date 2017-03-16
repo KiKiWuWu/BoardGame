@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class GoldController : MonoBehaviour {
 
     private int startAmountOfGold = 50;
     private int amountPlayersGetEveryTurn = 10;
+    private int goldForOccupiedCastle = 50;
     private int costToActivateABuff = 200;
     private int costToUnlockSpecialAttack = 500;
 
@@ -11,11 +13,14 @@ public class GoldController : MonoBehaviour {
     private int goldCountPlayerTwo;
 
     private AllUnitsController unitController;
+    private CastleController castleController;
 
 
 	// Use this for initialization
 	void Start () {
         unitController = gameObject.GetComponent<AllUnitsController>();
+        castleController = gameObject.GetComponent<CastleController>();
+
         goldCountPlayerOne = startAmountOfGold;
         goldCountPlayerTwo = startAmountOfGold;
 	}
@@ -35,8 +40,22 @@ public class GoldController : MonoBehaviour {
     }
 
 
+    //Adds gold to the current active player depending on the amount of occupied castles
+    public void addGoldForEveryOccupiedCastleToPlayersGoldCount()
+    {
+        if (unitController.activePlayer() == 0)
+        {
+            goldCountPlayerOne += goldForOccupiedCastle * castleController.countOccupiedCastlesOfCurrentPlayer(0);
+        }
+        else
+        {
+            goldCountPlayerTwo += goldForOccupiedCastle * castleController.countOccupiedCastlesOfCurrentPlayer(1);
+        }
+    }
+
+
     //Adds a specific amount of gold to the gold count of the current player (called by GUIController class)
-    public void addGoldToPlayersGoldCount()
+    public void addTurnGoldToPlayersGoldCount()
     {
         if(unitController.activePlayer() == 0)
         {

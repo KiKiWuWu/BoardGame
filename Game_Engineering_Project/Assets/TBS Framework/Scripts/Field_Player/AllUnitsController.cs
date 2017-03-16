@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AllUnitsController : MonoBehaviour {
@@ -10,7 +11,7 @@ public class AllUnitsController : MonoBehaviour {
     private Unit selectedEnemyUnit;
     
     private int currentActivePlayer;
-    public bool enemyIsBeingAttacked = false;
+    private bool enemyIsBeingAttacked = false;
 
     private CursorOverPlayerController cursorController;
 
@@ -114,5 +115,19 @@ public class AllUnitsController : MonoBehaviour {
     public void unlockSpecialAttackOfSelectedUnit()
     {
         selectedAlliedUnit.specialAttackPurchased = true;
+    }
+
+
+    //Returns true or false if a attack is currently performed or not
+    public bool isAttackCurrentlyPerformed()
+    {
+        return enemyIsBeingAttacked;
+    }
+
+
+    //Changes the state if a attack is currently performed
+    public void stateOnAttack(bool attackState)
+    {
+        enemyIsBeingAttacked = attackState;
     }
 }

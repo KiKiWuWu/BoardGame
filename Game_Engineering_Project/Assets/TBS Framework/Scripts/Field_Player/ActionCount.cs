@@ -8,6 +8,7 @@ public class ActionCount : MonoBehaviour
     private int costOfAttack = 5;
     private int costOfActivatingSpecialAbilityAttack = 10;
     private int costOfActivatingBuff = 3;
+    private int costToNeutralizeOrOccupieCastle = 5;
 
     private GUIControllerHexa guiController;
     private CharacterSpecialAttackController specialAttackController;
@@ -45,6 +46,11 @@ public class ActionCount : MonoBehaviour
         {
             currentlyAvailableActionPoints -= costOfActivatingBuff;
             guiController.showCostsOnScreen(costOfActivatingBuff);
+        }
+        if (command == "castle")
+        {
+            currentlyAvailableActionPoints -= costToNeutralizeOrOccupieCastle;
+            guiController.showCostsOnScreen(costToNeutralizeOrOccupieCastle);
         }
     }
 
@@ -107,6 +113,20 @@ public class ActionCount : MonoBehaviour
     public bool buffActivationPossible()
     {
         if(currentlyAvailableActionPoints >= costOfActivatingBuff)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+
+    //Checks if it is possible to occupie or neutralize castle (called by CastleController class)
+    public bool castleNeutralizeOrOccupiePossible()
+    {
+        if(currentlyAvailableActionPoints >= costToNeutralizeOrOccupieCastle)
         {
             return true;
         }
