@@ -292,6 +292,14 @@ public abstract class Unit : MonoBehaviour
     }
 
 
+    public void setUnitToFinishState()
+    {
+        SetState(new UnitStateMarkedAsFinished(this));
+        MovementPoints = 0;
+        ActionPoints = 0;
+    }
+
+
     public virtual void Move(Cell destinationCell, List<Cell> path)
     {
         if (isMoving)

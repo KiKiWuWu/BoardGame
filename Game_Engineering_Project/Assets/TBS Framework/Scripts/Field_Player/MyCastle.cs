@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MyCastle : MonoBehaviour {
 
@@ -29,14 +26,17 @@ public class MyCastle : MonoBehaviour {
         if(castleOccupied == occupiedByPlayerOne)
         {
             transform.FindChild("playerColor").GetComponent<Renderer>().material.color = Color.blue;
+            transform.FindChild("CastleHighlighter").GetComponent<Renderer>().material.color = new Color(0, 0, 1f, 0.8f);
         }
         else if(castleOccupied == occupiedByPlayerTwo)
         {
             transform.FindChild("playerColor").GetComponent<Renderer>().material.color = Color.red;
+            transform.FindChild("CastleHighlighter").GetComponent<Renderer>().material.color = new Color(1f, 0, 0, 0.8f);
         }
         else
         {
             transform.FindChild("playerColor").GetComponent<Renderer>().material.color = Color.white;
+            transform.FindChild("CastleHighlighter").GetComponent<Renderer>().material.color = new Color(0.8f, 0.8f, 0.8f, 0.8f);
         }
     }
 

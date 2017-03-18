@@ -2,16 +2,14 @@
 
 class MyHexagon : Hexagon
 {
-    private Texture textureForTheField;
+    private Transform HighlightField;
 
-
-    /*
+    
     public void Start()
     {
-        SetColor(Color.white);
-        SetOutlineColor(Color.black);
+        HighlightField = transform.FindChild("HexagonHighlighter");
     }
-    */
+    
 
     public override Vector3 GetCellDimensions()
     {
@@ -37,16 +35,13 @@ class MyHexagon : Hexagon
 
     public override void MarkAsReachable()
     {
-        textureForTheField = Resources.Load("MovementFieldHighlight") as Texture;
-        
-        SetTexture(textureForTheField);
+        setColorOfHighlighter("reachable");
     }
 
 
     public override void MarkAsPath()
     {
-        textureForTheField = Resources.Load("MovementPath") as Texture;
-        SetTexture(textureForTheField);
+        setColorOfHighlighter("path");
     }
 
 
@@ -58,10 +53,34 @@ class MyHexagon : Hexagon
 
     public override void UnMark()
     {
-        textureForTheField = Resources.Load("StandardField") as Texture;
-        SetTexture(textureForTheField);
-        SetOutlineColor(Color.black);
+        setColorOfHighlighter("unmark");
     }
+
+
+
+    private void setColorOfHighlighter(string command)
+    {
+        var highLightField = transform.FindChild("HexagonHighlighter").GetComponent<Renderer>();
+
+        if (command == "reachable")
+        {
+            
+
+            highLightField.material.color = new Color(1f, 0.92f, 0.016f, 0.5f);
+            transform.FindChild("HexagonHighlighter").gameObject.SetActive(true);
+        }
+
+        if (command == "path")
+        {
+            highLightField.material.color = new Color(0, 1, 1, 0.5f);
+        }
+
+        if (command == "unmark")
+        {
+            transform.FindChild("HexagonHighlighter").gameObject.SetActive(false);
+        }
+    }
+
 
 
     private void SetTexture(Texture floorTexture)

@@ -68,9 +68,9 @@ public class CastleController : MonoBehaviour {
         {
             actionCount.subtractCostOfActionFromCurrentActionCount("castle");
             unitController.currentlySelectedAlliedUnit().standOnCastle.changeStateOfCastle(-1);
-            unitController.currentlySelectedAlliedUnit().ActionPoints = 0;
-            unitController.currentlySelectedAlliedUnit().MovementPoints = 0;
-            unitController.currentlySelectedAlliedUnit().SetState(new UnitStateMarkedAsFinished(unitController.currentlySelectedAlliedUnit()));
+
+            unitController.currentlySelectedAlliedUnit().setUnitToFinishState();
+
             guiController.showMessageOnScreenAboutCastleState("castleNeutralized");
         }
         else
@@ -87,9 +87,9 @@ public class CastleController : MonoBehaviour {
         {
             actionCount.subtractCostOfActionFromCurrentActionCount("castle");
             unitController.currentlySelectedAlliedUnit().standOnCastle.changeStateOfCastle(unitController.activePlayer());
-            unitController.currentlySelectedAlliedUnit().ActionPoints = 0;
-            unitController.currentlySelectedAlliedUnit().MovementPoints = 0;
-            unitController.currentlySelectedAlliedUnit().SetState(new UnitStateMarkedAsFinished(unitController.currentlySelectedAlliedUnit()));
+            
+            unitController.currentlySelectedAlliedUnit().setUnitToFinishState();
+
             guiController.showMessageOnScreenAboutCastleState("castleOccupied");
         }
         else

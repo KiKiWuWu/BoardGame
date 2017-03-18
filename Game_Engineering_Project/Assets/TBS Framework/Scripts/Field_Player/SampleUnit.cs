@@ -96,7 +96,7 @@ public class SampleUnit : Unit
     //Highlights all allies on the field
     public override void MarkAsFriendly()
     {
-        //GetComponent<Renderer>().material.color = LeadingColor + new Color(0.8f, 1, 0.8f);
+        
     }
 
 
@@ -128,20 +128,17 @@ public class SampleUnit : Unit
 
     private void SetHighlighter(string command)
     {
-        var highlighter = transform.Find("HighlighterField").GetComponent<Renderer>();
-        if (highlighter != null)
+        var CharacterHighlighter = transform.FindChild("CharacterHighlighter");
+        CharacterHighlighter.gameObject.SetActive(true);
+
+        if (command == "enemy")
         {
-            highlighter.gameObject.SetActive(true);
+            CharacterHighlighter.GetComponent<Renderer>().material.color = new Color(1f, 0, 0, 0.8f);
+        }
 
-            if (command == "enemy")
-            {
-                highlighter.material.mainTexture = Resources.Load("AttackField") as Texture;
-            }
-
-            if(command == "unmark")
-            {
-                highlighter.gameObject.SetActive(false);
-            }
+        if (command == "unmark")
+        {
+            CharacterHighlighter.gameObject.SetActive(false);
         }        
     }
 }

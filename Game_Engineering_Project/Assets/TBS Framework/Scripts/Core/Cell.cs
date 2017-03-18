@@ -15,6 +15,10 @@ public abstract class Cell : MonoBehaviour, IGraphNode
     /// </summary>
     public bool IsTaken;
     /// <summary>
+    /// Indicates if a castle object is occupying the cell.
+    /// </summary>
+    public MyCastle occupiedByCastle;
+    /// <summary>
     /// Cost of moving through the cell.
     /// </summary>
     public int MovementCost;
