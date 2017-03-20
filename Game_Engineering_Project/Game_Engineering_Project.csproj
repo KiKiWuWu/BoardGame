@@ -172,6 +172,7 @@
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\SampleUnit.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\TrackableImageOnScreenHandler.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\TurnCounter.cs" />
+    <Compile Include="Assets\TBS Framework\Scripts\Field_Player\UnitOverviewController.cs" />
     <Compile Include="Assets\Vuforia\Scripts\BackgroundPlaneBehaviour.cs" />
     <Compile Include="Assets\Vuforia\Scripts\CloudRecoBehaviour.cs" />
     <Compile Include="Assets\Vuforia\Scripts\CylinderTargetBehaviour.cs" />

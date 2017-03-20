@@ -60,24 +60,26 @@ class MyHexagon : Hexagon
 
     private void setColorOfHighlighter(string command)
     {
-        var highLightField = transform.FindChild("HexagonHighlighter").GetComponent<Renderer>();
-
-        if (command == "reachable")
+        if (transform.FindChild("HexagonHighlighter") != null)
         {
-            
+            var highLightField = transform.FindChild("HexagonHighlighter").GetComponent<Renderer>();
 
-            highLightField.material.color = new Color(1f, 0.92f, 0.016f, 0.5f);
-            transform.FindChild("HexagonHighlighter").gameObject.SetActive(true);
-        }
 
-        if (command == "path")
-        {
-            highLightField.material.color = new Color(0, 1, 1, 0.5f);
-        }
+            if (command == "reachable")
+            {
+                highLightField.material.color = new Color(1f, 0.92f, 0.016f, 0.5f);
+                transform.FindChild("HexagonHighlighter").gameObject.SetActive(true);
+            }
 
-        if (command == "unmark")
-        {
-            transform.FindChild("HexagonHighlighter").gameObject.SetActive(false);
+            if (command == "path")
+            {
+                highLightField.material.color = new Color(0, 1, 1, 0.5f);
+            }
+
+            if (command == "unmark")
+            {
+                transform.FindChild("HexagonHighlighter").gameObject.SetActive(false);
+            }
         }
     }
 

@@ -2,6 +2,7 @@
 
 public class CursorOverPlayerController : MonoBehaviour {
 
+    public GameObject CursorStandartPosition;
     public GameObject CursorOverPlayer;
     public GameObject CursorOverEnemy;
 
@@ -42,13 +43,19 @@ public class CursorOverPlayerController : MonoBehaviour {
     {
         if(unit == "friend")
         {
-            CursorOverPlayer.SetActive(false);
+            CursorOverPlayer.transform.parent = CursorStandartPosition.transform;
+            CursorOverPlayer.transform.position = CursorStandartPosition.transform.position;
+
             playerSelected = false;
+            CursorOverPlayer.SetActive(false);
         }
         else
         {
-            CursorOverEnemy.SetActive(false);
+            CursorOverEnemy.transform.parent = CursorStandartPosition.transform;
+            CursorOverEnemy.transform.position = CursorStandartPosition.transform.position;
+
             enemySelected = false;
+            CursorOverEnemy.SetActive(false);
         }
     }
 

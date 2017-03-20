@@ -114,7 +114,10 @@ public abstract class Unit : MonoBehaviour
         {
             if(allUnitsController.currentlySelectedEnemyUnit() != this)
             {
-                allUnitsController.selectedEnemyUnitByPlayer(this);
+                if(HitPoints > 0)
+                {
+                    allUnitsController.selectedEnemyUnitByPlayer(this);
+                }
 
                 if (attackCurrentlyInProgress)
                 {

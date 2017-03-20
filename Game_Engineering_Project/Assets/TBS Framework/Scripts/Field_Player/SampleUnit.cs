@@ -54,8 +54,8 @@ public class SampleUnit : Unit
     }
 
     public override void MarkAsDestroyed()
-    { 
-
+    {
+        unitController.selectedEnemyUnitByPlayer(null);
     }
 
 

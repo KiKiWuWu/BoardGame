@@ -40,7 +40,6 @@ public class CastleController : MonoBehaviour {
                 numbOfOccupiedCastles++;
             }
         }
-        print(numbOfOccupiedCastles);
         return numbOfOccupiedCastles;
     }
 

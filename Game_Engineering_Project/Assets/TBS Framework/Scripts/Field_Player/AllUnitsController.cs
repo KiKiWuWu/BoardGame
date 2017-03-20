@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class AllUnitsController : MonoBehaviour {
+public class AllUnitsController : MonoBehaviour
+{
     public CellGrid cellGrid;
 
     private List<Unit> listOfPlayerOneUnits = new List<Unit>();
@@ -11,6 +11,7 @@ public class AllUnitsController : MonoBehaviour {
     private Unit selectedEnemyUnit;
     
     private int currentActivePlayer;
+    private int maxNumberOfUnits = 6;
     private bool enemyIsBeingAttacked = false;
 
     private CursorOverPlayerController cursorController;
@@ -21,26 +22,75 @@ public class AllUnitsController : MonoBehaviour {
         cursorController = gameObject.GetComponent<CursorOverPlayerController>();
 
         currentActivePlayer = cellGrid.CurrentPlayerNumber;
+        
+        getListOfAllUnitsOnTheField();
 	}
 
-    /*
+    
     //Gets all units (foe and enemy) which are placed on the field
     private void getListOfAllUnitsOnTheField()
     {
-        print(cellGrid.Units.Count);
-        for(int i = 0; i < cellGrid.Units.Count; i++)
+        var allUnits = GameObject.Find("Unit");
+        for (int i = 0; i < allUnits.transform.childCount; i++)
         {
-            if(cellGrid.Units[i].PlayerNumber == 0)
+            if(allUnits.transform.GetChild(i).GetComponent<Unit>().PlayerNumber == 0)
             {
-                listOfPlayerOneUnits.Add(cellGrid.Units[i]);
+                listOfPlayerOneUnits.Add(allUnits.transform.GetChild(i).GetComponent<Unit>());
             }
             else
             {
-                listOfPlayerTwoUnits.Add(cellGrid.Units[i]);
+                listOfPlayerTwoUnits.Add(allUnits.transform.GetChild(i).GetComponent<Unit>());
             }
         }
     }
 
+
+    public List<Unit> getCurrentPlayerUnits(string command)
+    {
+        int unitsOfPlayer;
+        if(command == "playerOne")
+        {
+            unitsOfPlayer = 0;
+        }
+        else
+        {
+            unitsOfPlayer = 1;
+        }
+
+        List<Unit> listWithUnits = new List<Unit>();
+        var allUnits = GameObject.Find("Unit");
+
+        for (int i = 0; i < allUnits.transform.childCount; i++)
+        {
+            if (allUnits.transform.GetChild(i).GetComponent<Unit>().PlayerNumber == unitsOfPlayer)
+            {
+                listWithUnits.Add(allUnits.transform.GetChild(i).GetComponent<Unit>());
+            }
+        }
+        return listWithUnits;
+    }
+
+    /*
+    public List<Unit> getPlayerUnits()
+    {
+        if(currentActivePlayer == 0)
+        {
+            return listOfPlayerOneUnits;
+        }
+        else
+        {
+            return listOfPlayerTwoUnits;
+        }
+    }
+    */
+
+    public int numberOfUnits()
+    {
+        return maxNumberOfUnits;
+    }
+
+
+    /*
     //Updates the list of units of all players
     public void updateUnitListOfAllPlayer()
     {
@@ -50,6 +100,7 @@ public class AllUnitsController : MonoBehaviour {
         getListOfAllUnitsOnTheField();
     }
     */
+
 
     //Changes the current active player when a turn is changed
     public void changeCurrentActivePlayer()

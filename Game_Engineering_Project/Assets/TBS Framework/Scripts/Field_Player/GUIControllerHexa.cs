@@ -35,6 +35,8 @@ public class GUIControllerHexa : MonoBehaviour
     public Text DisplayCostForActionOnScreen;
     public Text HPPlayer;
     public Text HPEnemy;
+    public Text PlayerUnitNameText;
+    public Text FoeUnitNameText;
     public Text RoundCounter;
     public Text GoldCountOnScreen;
     public Text CastleInformationText;
@@ -44,7 +46,6 @@ public class GUIControllerHexa : MonoBehaviour
 
     public Image ImagePlayer;
     public Image ImageEnemy;
-
 
     private ActionCount actionsCounter;
     private TrackableImageOnScreenHandler trackableHandler;
@@ -481,7 +482,7 @@ public class GUIControllerHexa : MonoBehaviour
 
     //Shows the health bar of a foe or enemy on screen with given parameters (called by Unit and SampleUnit class)
     public void showHPBarOfSelectedUnit(string unitFraction, int hitPoints, int totalHitPoints)
-    {
+    {  
         if (unitFraction != "attackOnEnemy")
         {
             float HPInProcent = ((float)hitPoints / totalHitPoints) * 100;
@@ -490,6 +491,7 @@ public class GUIControllerHexa : MonoBehaviour
             if (unitFraction == "friend")
             {
                 UITopLeft.SetActive(true);
+                PlayerUnitNameText.text = unitController.currentlySelectedAlliedUnit().name;
                 HPSliderPlayer.value = HPInProcent;
                 HPPlayer.text = healthPointsText;
             }
@@ -497,6 +499,7 @@ public class GUIControllerHexa : MonoBehaviour
             if (unitFraction == "enemy")
             {
                 UITopRight.SetActive(true);
+                FoeUnitNameText.text = unitController.currentlySelectedEnemyUnit().name;
                 HPSliderEnemy.value = HPInProcent;
                 HPEnemy.text = healthPointsText;
             }
