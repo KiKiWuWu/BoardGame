@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class CastleController : MonoBehaviour {
-
+public class CastleController : MonoBehaviour
+{
     public GameObject AllCastleObjects;
 
     private AllUnitsController unitController;
     private ActionCount actionCount;
-    private GUIControllerHexa guiController;
+    private MessagesOnScreenController messageOnScreenController;
 
     private List<MyCastle> castleList;
 
@@ -16,7 +16,7 @@ public class CastleController : MonoBehaviour {
     void Start () {
         unitController = gameObject.GetComponent<AllUnitsController>();
         actionCount = gameObject.GetComponent<ActionCount>();
-        guiController = gameObject.GetComponent<GUIControllerHexa>();
+        messageOnScreenController = gameObject.GetComponent<MessagesOnScreenController>();
 
         castleList = new List<MyCastle>();
     }
@@ -30,17 +30,25 @@ public class CastleController : MonoBehaviour {
     //Counts the number of occupied castles which the current player posseses
     public int countOccupiedCastlesOfCurrentPlayer(int currentPlayer)
     {
-        updateCurrentListOfCastles();
-        int numbOfOccupiedCastles = 0;
-
-        for(int i = 0; i < castleList.Count; i++)
+        if(AllCastleObjects != null)
         {
-            if(castleList[i].castleOccupation() == currentPlayer)
+            updateCurrentListOfCastles();
+            int numbOfOccupiedCastles = 0;
+
+            for (int i = 0; i < castleList.Count; i++)
             {
-                numbOfOccupiedCastles++;
+                if (castleList[i].castleOccupation() == currentPlayer)
+                {
+                    numbOfOccupiedCastles++;
+                }
             }
+            return numbOfOccupiedCastles;
         }
-        return numbOfOccupiedCastles;
+        else
+        {
+            return 0;
+        }
+        
     }
 
 
@@ -70,11 +78,11 @@ public class CastleController : MonoBehaviour {
 
             unitController.currentlySelectedAlliedUnit().setUnitToFinishState();
 
-            guiController.showMessageOnScreenAboutCastleState("castleNeutralized");
+            messageOnScreenController.showMessageOnScreenAboutCastleState("castleNeutralized");
         }
         else
         {
-            guiController.showMessageOnScreenAboutCastleState("notEnoughtPoints");
+            messageOnScreenController.showMessageOnScreenAboutCastleState("notEnoughtPoints");
         }
     }
 
@@ -89,11 +97,18 @@ public class CastleController : MonoBehaviour {
             
             unitController.currentlySelectedAlliedUnit().setUnitToFinishState();
 
-            guiController.showMessageOnScreenAboutCastleState("castleOccupied");
+            messageOnScreenController.showMessageOnScreenAboutCastleState("castleOccupied");
         }
         else
         {
-            guiController.showMessageOnScreenAboutCastleState("notEnoughtPoints");
+            messageOnScreenController.showMessageOnScreenAboutCastleState("notEnoughtPoints");
         }
+    }
+
+
+    public void destroyAllCastlesOnTheField()
+    {
+        Destroy(AllCastleObjects);
+        AllCastleObjects = null;
     }
 }

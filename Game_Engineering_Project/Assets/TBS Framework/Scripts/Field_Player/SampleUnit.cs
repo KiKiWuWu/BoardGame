@@ -128,17 +128,20 @@ public class SampleUnit : Unit
 
     private void SetHighlighter(string command)
     {
-        var CharacterHighlighter = transform.FindChild("CharacterHighlighter");
-        CharacterHighlighter.gameObject.SetActive(true);
-
-        if (command == "enemy")
+        if(this != null)
         {
-            CharacterHighlighter.GetComponent<Renderer>().material.color = new Color(1f, 0, 0, 0.8f);
-        }
+            var CharacterHighlighter = transform.FindChild("CharacterHighlighter");
+            CharacterHighlighter.gameObject.SetActive(true);
 
-        if (command == "unmark")
-        {
-            CharacterHighlighter.gameObject.SetActive(false);
-        }        
+            if (command == "enemy")
+            {
+                CharacterHighlighter.GetComponent<Renderer>().material.color = new Color(1f, 0, 0, 0.8f);
+            }
+
+            if (command == "unmark")
+            {
+                CharacterHighlighter.gameObject.SetActive(false);
+            }
+        }   
     }
 }

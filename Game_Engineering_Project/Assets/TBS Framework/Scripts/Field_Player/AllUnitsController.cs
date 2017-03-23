@@ -45,24 +45,14 @@ public class AllUnitsController : MonoBehaviour
     }
 
 
-    public List<Unit> getCurrentPlayerUnits(string command)
+    public List<Unit> getCurrentPlayerUnits(int playersUnits)
     {
-        int unitsOfPlayer;
-        if(command == "playerOne")
-        {
-            unitsOfPlayer = 0;
-        }
-        else
-        {
-            unitsOfPlayer = 1;
-        }
-
         List<Unit> listWithUnits = new List<Unit>();
         var allUnits = GameObject.Find("Unit");
 
         for (int i = 0; i < allUnits.transform.childCount; i++)
         {
-            if (allUnits.transform.GetChild(i).GetComponent<Unit>().PlayerNumber == unitsOfPlayer)
+            if (allUnits.transform.GetChild(i).GetComponent<Unit>().PlayerNumber == playersUnits)
             {
                 listWithUnits.Add(allUnits.transform.GetChild(i).GetComponent<Unit>());
             }

@@ -7,17 +7,9 @@ public class GUIControllerHexa : MonoBehaviour
 {
     public CellGrid CellGrid;
 
+    public GameObject Canvas;
     public GameObject UITopLeft;
     public GameObject UITopRight;
-    public GameObject Canvas;
-    public GameObject ChangeTurnScreen;
-    public GameObject EndScreen;
-    public GameObject BuffScreen;
-    public GameObject NotEnoughtActionPointsScreen;
-    public GameObject ActivateBuffButtonOnScreen;
-    public GameObject SpecialAttackNotPossibleScreen;
-    public GameObject NotEnoughtGoldToExecuteBuffScreen;
-    public GameObject CastleInformationScreen;
     public GameObject ActivateOrCancelBuffButtons;
     public GameObject SpecialAttackButtonsArea;
     public GameObject CastleButtonsArea;
@@ -29,9 +21,7 @@ public class GUIControllerHexa : MonoBehaviour
     public Button NeutralizeCastleButton;
     public Button ConquerCastleButton;
 
-    public Text EndScreenText;
     public Text RemainingActionCountOnScreen;
-    public Text ExecutedBuffTextOnScreen;
     public Text DisplayCostForActionOnScreen;
     public Text HPPlayer;
     public Text HPEnemy;
@@ -39,7 +29,6 @@ public class GUIControllerHexa : MonoBehaviour
     public Text FoeUnitNameText;
     public Text RoundCounter;
     public Text GoldCountOnScreen;
-    public Text CastleInformationText;
 
     public Slider HPSliderPlayer;
     public Slider HPSliderEnemy;
@@ -47,6 +36,7 @@ public class GUIControllerHexa : MonoBehaviour
     public Image ImagePlayer;
     public Image ImageEnemy;
 
+    private MessagesOnScreenController messageOnScreenController;
     private ActionCount actionsCounter;
     private TrackableImageOnScreenHandler trackableHandler;
     private BuffExecuter buffExecuter;
@@ -54,12 +44,15 @@ public class GUIControllerHexa : MonoBehaviour
     private GoldController goldController;
     private TurnCounter turnCounter;
     private AllUnitsController unitController;
+    private FieldDestroyerController fieldDestroyController;
+    private CastleController castleController;
 
 
 
     //This function is called on start, initiates classes and EventHandler
     void Start()
     {
+        messageOnScreenController = gameObject.GetComponent<MessagesOnScreenController>();
         actionsCounter = gameObject.GetComponent<ActionCount>();
         trackableHandler = gameObject.GetComponent<TrackableImageOnScreenHandler>();
         buffExecuter = gameObject.GetComponent<BuffExecuter>();
@@ -67,11 +60,21 @@ public class GUIControllerHexa : MonoBehaviour
         goldController = gameObject.GetComponent<GoldController>();
         turnCounter = gameObject.GetComponent<TurnCounter>();
         unitController = gameObject.GetComponent<AllUnitsController>();
+        fieldDestroyController = gameObject.GetComponent<FieldDestroyerController>();
+        castleController = gameObject.GetComponent<CastleController>();
+        
+        CellGrid.GameEnded += GetOnGameEnded();
 
-        CellGrid.TurnEnded += OnTurnEnded;
-        CellGrid.GameEnded += OnGameEnded;
+        RoundCounter.text = "Runde" + "\n" + turnCounter.currentTurn();
     }
 
+    
+    //Handles the Event game ended when it is called
+    private EventHandler GetOnGameEnded()
+    {
+        return OnGameEnded;
+    }
+    
 
     //Update function is called every frame
     void Update()
@@ -79,13 +82,10 @@ public class GUIControllerHexa : MonoBehaviour
         showOrHideCanvas();
         updateActionCountOnScreen();
         checkInteractabilityOfBuffButton();
-        //showOrHideBuffPurchaseButton();
-        //checkIfBuffPurchaseIsPossible();
         showOrHideBuffActivateOrCancelButtons();
         checkIfUnitsAreInBuffArea();
         updateGoldCountOnScreen();
         checkInteractabilityOfSpecialAttackButton();
-
         checkIfCharacterStandsOnACastle();
     }
 
@@ -99,7 +99,6 @@ public class GUIControllerHexa : MonoBehaviour
             {
                 ConquerCastleButton.gameObject.SetActive(false);
                 NeutralizeCastleButton.gameObject.SetActive(true);
-                //print("SHOWWWW NEUTRALIZZEEE");
             }
 
             if (unitController.currentlySelectedAlliedUnit().standOnCastle.occupiedStateOfCastle(unitController.activePlayer()) == "conquer")
@@ -107,7 +106,6 @@ public class GUIControllerHexa : MonoBehaviour
                 NeutralizeCastleButton.gameObject.SetActive(false);
                 ConquerCastleButton.gameObject.SetActive(true);
                 ConquerCastleButton.interactable = true;
-                //print("SHOWWWW CONQUEEERRRRRR");
             }
 
             if (unitController.currentlySelectedAlliedUnit().standOnCastle.occupiedStateOfCastle(unitController.activePlayer()) == "conquered")
@@ -115,9 +113,7 @@ public class GUIControllerHexa : MonoBehaviour
                 NeutralizeCastleButton.gameObject.SetActive(false);
                 ConquerCastleButton.gameObject.SetActive(true);
                 ConquerCastleButton.interactable = false;
-                //print("ALREADDYYY CONQUEEREDDD");
             }
-
             CastleButtonsArea.SetActive(true);
         }
         else
@@ -218,20 +214,6 @@ public class GUIControllerHexa : MonoBehaviour
     }
 
 
-    //Checks if the current player has enought action points to purchase a buff and changes the purchase button to interactable or not interactable
-    private void checkIfBuffPurchaseIsPossible()
-    {
-        if (actionsCounter.buffActivationPossible() && !trackableHandler.buffPurchased())
-        {
-            BuffPurchaseButton.interactable = true;
-        }
-        else
-        {
-            BuffPurchaseButton.interactable = false;
-        }
-    }
-
-
     //Checks the interactability of the buff purchase button
     private void checkInteractabilityOfBuffButton()
     {
@@ -242,20 +224,6 @@ public class GUIControllerHexa : MonoBehaviour
         else
         {
             BuffPurchaseButton.interactable = false;
-        }
-    }
-
-
-    //Shows or hides the purches button of a buff if buff is shown or not shown
-    private void showOrHideBuffPurchaseButton()
-    {
-        if (trackableHandler.isBuffImageOnScreen())
-        {
-            ActivateBuffButtonOnScreen.SetActive(true);
-        }
-        else
-        {
-            ActivateBuffButtonOnScreen.SetActive(false);
         }
     }
 
@@ -296,41 +264,42 @@ public class GUIControllerHexa : MonoBehaviour
         turnCounter.changeTurn();
         RoundCounter.text = "Runde" + "\n" + turnCounter.currentTurn();
         actionsCounter.restartAvailableActionPoints();
-        CellGrid.EndTurn();
 
-        unitController.selectedEnemyUnitByPlayer(null);
-
-        goldController.addGoldForEveryOccupiedCastleToPlayersGoldCount();
-        unitController.changeCurrentActivePlayer();
-        goldController.addTurnGoldToPlayersGoldCount();
-    }
-
-
-    //Event is called when the player end his/her turn, a end turn message is shown on the screen
-    private void OnTurnEnded(object sender, EventArgs e)
-    {
         UITopLeft.SetActive(false);
         UITopRight.SetActive(false);
-        ChangeTurnScreen.SetActive(true);
+
+        unitController.selectedAlliedUnitByPlayer(null);
+        unitController.selectedEnemyUnitByPlayer(null);
+        
+        CellGrid.EndTurn();
+
+        statusOfCastlesOnTheField();
+        unitController.changeCurrentActivePlayer();
+        goldController.addTurnGoldToPlayersGoldCount();
+
+
+        messageOnScreenController.showNextPlayerScreen();
     }
 
 
-    //Shows the end screen if the game is finished and displayes the winner of the game
+    //Checks if gold (depending on the number of occupied castles) should be added to the gold count of the current player or the castles on the field should be destroyed
+    private void statusOfCastlesOnTheField()
+    {
+        if(turnCounter.currentTurn() < fieldDestroyController.startFieldDestructionTurn())
+        {
+            goldController.addGoldForEveryOccupiedCastleToPlayersGoldCount();
+        }
+        else if(turnCounter.currentTurn() == fieldDestroyController.startFieldDestructionTurn())
+        {
+            castleController.destroyAllCastlesOnTheField();
+        }
+    }
+
+
+    //Shows the end screen if the game is finished and displayes the winner of the game or a draw message
     private void OnGameEnded(object sender, EventArgs e)
     {
-        Canvas.SetActive(true);
-        string victoriousPlayer;
-
-        if((sender as CellGrid).CurrentPlayerNumber == 0)
-        {
-            victoriousPlayer = "Spieler 1";
-        }
-        else
-        {
-            victoriousPlayer = "Spieler 2";
-        }
-        EndScreenText.text = victoriousPlayer + " hat das Spiel gewonnen!!!";
-        EndScreen.SetActive(true);
+        messageOnScreenController.showEndScreen((sender as CellGrid).getPlayerWithLastUnitOnTheField());
     }
 
 
@@ -353,102 +322,40 @@ public class GUIControllerHexa : MonoBehaviour
     //Shows a attack not possible message if there are not enought action points to execute a attack (called by Unit class)
     public void showAttackNotPossibleMessage()
     {
-        NotEnoughtActionPointsScreen.SetActive(true);
-        Invoke("hideActionPointsMessage", 0.7f);
+        messageOnScreenController.showNotEnoughtAPForAttackScreen();
     }
 
 
-    //Hides the attack is not possible message
-    private void hideActionPointsMessage()
-    {
-        NotEnoughtActionPointsScreen.SetActive(false);
-    }
-
-
-    //Checks if the buff on screen can be executed or not
+    //Checks if the buff on screen can be executed or not (if not a message with the reason for that will be displayed on screen)
     public void executeBuffButtonPressedByPlayer()
     {
-        if (!goldController.isPurchaseOfABuffPossible())
+        if (!goldController.isPurchaseOfABuffPossible() && !actionsCounter.buffActivationPossible())
         {
-            NotEnoughtGoldToExecuteBuffScreen.SetActive(true);
+            messageOnScreenController.buffActivationIsNotPossibleScreen("goldAndAP");
+        }
+        else if (!goldController.isPurchaseOfABuffPossible())
+        {
+            messageOnScreenController.buffActivationIsNotPossibleScreen("gold");
+        }
+        else if (!actionsCounter.buffActivationPossible())
+        {
+            messageOnScreenController.buffActivationIsNotPossibleScreen("AP");
         }
         else
         {
             buffExecuter.executeBuffOnSelectedUnits();
-            trackableHandler.destroyBuffIfOnScreen();
             showBuffActivatedMessage();
             actionsCounter.subtractCostOfActionFromCurrentActionCount("buff");
             goldController.reduceGoldAfterAPurchase("buff");
         }
+        trackableHandler.destroyBuffIfOnScreen();
     }
 
 
     //Shows a message on screen that a buff was activated
     private void showBuffActivatedMessage()
     {
-        setBuffMessageOnScreen();
-        BuffScreen.SetActive(true);
-        Invoke("hideBuffScreenInformation", 1.5f);
-    }
-
-
-    //Hides the buff was activated message
-    private void hideBuffScreenInformation()
-    {
-        BuffScreen.SetActive(false);
-    }
-
-
-    //Shows the special attack is not possible message on screen (called by CharacterSpecialAttackController class)
-    public void showInfoScreenThatSpecialAttackIsNotPossible()
-    {
-        SpecialAttackNotPossibleScreen.SetActive(true);
-    }
-
-
-    //Gets the name of the activated buff and changes the text on screen
-    private void setBuffMessageOnScreen()
-    {
-        string activatedBuffMessage = "";
-
-        if (buffExecuter.nameOfTheCurrentBuff() == "attack")
-        {
-            activatedBuffMessage = "Die Angriffskraft wurde erhöht!";
-        }
-
-        if (buffExecuter.nameOfTheCurrentBuff() == "defence")
-        {
-            activatedBuffMessage = "Die Verteidigung wurde erhöht!";
-        }
-
-        if (buffExecuter.nameOfTheCurrentBuff() == "heal")
-        {
-            activatedBuffMessage = "Eine Heilung wurde aktiviert!";
-        }
-
-        ExecutedBuffTextOnScreen.text = activatedBuffMessage;
-    }
-
-
-    //Shows a message on screen depending on the state of castle an remaining action points
-    public void showMessageOnScreenAboutCastleState(string command)
-    {
-        if(command == "castleNeutralized")
-        {
-            CastleInformationText.text = "Die Burg wurde erfolgreich neutralisiert!";
-        }
-
-        if(command == "castleOccupied")
-        {
-            CastleInformationText.text = "Die Burg wurde erfolgreich eingenommen!";
-        }
-
-        if(command == "notEnoughtPoints")
-        {
-            CastleInformationText.text = "Sie haben nicht genug Aktionspunkte!";
-        }
-
-        CastleInformationScreen.SetActive(true);
+        messageOnScreenController.showBuffMessageOnScreen();
     }
 
 

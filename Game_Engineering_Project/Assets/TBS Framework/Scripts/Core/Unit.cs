@@ -10,6 +10,7 @@ using UnityEngine.EventSystems;
 /// </summary>
 public abstract class Unit : MonoBehaviour
 {
+    private CellGrid cellGrid;
     private ActionCount actionsCounter;
     private GUIControllerHexa gUIController;
     private CharacterSpecialAttackController specialAttackController;
@@ -103,18 +104,27 @@ public abstract class Unit : MonoBehaviour
         TotalMovementPoints = MovementPoints;
     }
 
+    private bool IsPointerOverUIObject()
+    {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
+    }
+
 
     protected virtual void OnMouseDown()
     {
-        if (UnitClicked != null && EventSystem.current.IsPointerOverGameObject() == false)
+        if (UnitClicked != null && !IsPointerOverUIObject())
             UnitClicked.Invoke(this, new EventArgs());
 
 
-        if (UnitClicked != null && PlayerNumber != allUnitsController.activePlayer() && EventSystem.current.IsPointerOverGameObject() == false)
+        if (UnitClicked != null && PlayerNumber != allUnitsController.activePlayer() && !IsPointerOverUIObject())
         {
-            if(allUnitsController.currentlySelectedEnemyUnit() != this)
+            if (allUnitsController.currentlySelectedEnemyUnit() != this)
             {
-                if(HitPoints > 0)
+                if (HitPoints > 0)
                 {
                     allUnitsController.selectedEnemyUnitByPlayer(this);
                 }
@@ -129,7 +139,7 @@ public abstract class Unit : MonoBehaviour
                     gUIController.showHPBarOfSelectedUnit("enemy", HitPoints, TotalHitPoints);
                 }
             }
-            else if(allUnitsController.currentlySelectedEnemyUnit() == this && !attackCurrentlyInProgress)
+            else if (allUnitsController.currentlySelectedEnemyUnit() == this && !attackCurrentlyInProgress)
             {
                 allUnitsController.selectedEnemyUnitByPlayer(null);
                 gUIController.hideHPBarOnScreen("enemy");
@@ -303,6 +313,13 @@ public abstract class Unit : MonoBehaviour
     }
 
 
+    public void destroyUnit()
+    {
+        UnitDestroyed.Invoke(this, new AttackEventArgs(null, this, TotalHitPoints));
+        OnDestroyed();
+    }
+
+
     public virtual void Move(Cell destinationCell, List<Cell> path)
     {
         if (isMoving)
@@ -316,8 +333,10 @@ public abstract class Unit : MonoBehaviour
         actionsCounter.subtractMovementCostFromCurrentActionCount(totalMovementCost);
 
         Cell.IsTaken = false;
+        Cell.unitOnCell = null;
         Cell = destinationCell;
         destinationCell.IsTaken = true;
+        Cell.unitOnCell = this;
 
         if (MovementSpeed > 0)
             StartCoroutine(MovementAnimation(path));
@@ -336,6 +355,7 @@ public abstract class Unit : MonoBehaviour
         path.Reverse();
         foreach (var cell in path)
         {
+            print("ISS MOOOOVIIINNGGGG");
             while (new Vector2(transform.position.x,transform.position.y) != new Vector2(cell.transform.position.x,cell.transform.position.y))
             {
                 transform.position = Vector3.MoveTowards(transform.position, new Vector3(cell.transform.position.x,cell.transform.position.y,transform.position.z), Time.deltaTime * MovementSpeed);
@@ -476,3 +496,4 @@ public class AttackEventArgs : EventArgs
         Damage = damage;
     }
 }
+ 

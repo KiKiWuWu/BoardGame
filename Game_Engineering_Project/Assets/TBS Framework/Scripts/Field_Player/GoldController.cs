@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
-public class GoldController : MonoBehaviour {
-
-    private int startAmountOfGold = 50;
+public class GoldController : MonoBehaviour
+{
+    private int startAmountOfGold = 600;
     private int amountPlayersGetEveryTurn = 10;
     private int goldForOccupiedCastle = 50;
     private int costToActivateABuff = 200;
@@ -132,5 +132,12 @@ public class GoldController : MonoBehaviour {
         {
             goldCountPlayerTwo -= costOfPurchase;
         }
+    }
+
+
+    //Returns the number of gold which is neseccery to activate a buff
+    public int numberOfGoldToActivateBuff()
+    {
+        return costToActivateABuff;
     }
 }

@@ -2,12 +2,11 @@
 
 class MyHexagon : Hexagon
 {
-    private Transform HighlightField;
 
     
     public void Start()
     {
-        HighlightField = transform.FindChild("HexagonHighlighter");
+
     }
     
 
@@ -59,7 +58,7 @@ class MyHexagon : Hexagon
 
 
     private void setColorOfHighlighter(string command)
-    {
+    {        
         if (transform.FindChild("HexagonHighlighter") != null)
         {
             var highLightField = transform.FindChild("HexagonHighlighter").GetComponent<Renderer>();

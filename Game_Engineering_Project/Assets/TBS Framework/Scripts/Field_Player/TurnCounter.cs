@@ -1,13 +1,9 @@
 ﻿using UnityEngine;
 
-public class TurnCounter : MonoBehaviour {
+public class TurnCounter : MonoBehaviour
+{
 
-    private int turnCounter;
-
-	// Use this for initialization
-	void Start () {
-        turnCounter = 1;
-	}
+    private int turnCounter = 1;
 
 
     //Adds 1 to the turn counter after a player finishes the turn (called by GUIController class)

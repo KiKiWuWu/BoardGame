@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class ActionCount : MonoBehaviour
 {
-    private static int actionPointsEveryTurn = 20;
+    private static int actionPointsEveryTurn = 10;
     private int currentlyAvailableActionPoints;
 
     private int costOfAttack = 5;
@@ -141,5 +142,19 @@ public class ActionCount : MonoBehaviour
     public int totalNumberOfActionPoints()
     {
         return actionPointsEveryTurn;
+    }
+
+
+    //Returns the number of action points which are necessery to activate a bull
+    internal int numberOfActionPointsToActivateBuff()
+    {
+        return costOfActivatingBuff;
+    }
+
+
+    //Returns the number of action points which are neceseery to occupie/neutralize castle (called by MessageOnScreenController.cs)
+    public int getPointsForOccupyingCastle()
+    {
+        return costToNeutralizeOrOccupieCastle;
     }
 }

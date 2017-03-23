@@ -163,10 +163,12 @@
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\CharacterSpecialAttackController.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\CursorOverPlayerController.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\DefenceBuff.cs" />
+    <Compile Include="Assets\TBS Framework\Scripts\Field_Player\FieldDestroyerController.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\FieldPositionController.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\GUIControllerHexa.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\GoldController.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\HealingBuff.cs" />
+    <Compile Include="Assets\TBS Framework\Scripts\Field_Player\MessagesOnScreenController.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\MyCastle.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\MyHexagon.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Field_Player\SampleUnit.cs" />

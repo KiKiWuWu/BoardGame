@@ -19,6 +19,10 @@ public abstract class Cell : MonoBehaviour, IGraphNode
     /// </summary>
     public MyCastle occupiedByCastle;
     /// <summary>
+    /// Indicates if a unit object is occupying the cell.
+    /// </summary>
+    public Unit unitOnCell;
+    /// <summary>
     /// Cost of moving through the cell.
     /// </summary>
     public int MovementCost;
@@ -33,19 +37,30 @@ public abstract class Cell : MonoBehaviour, IGraphNode
     public event EventHandler CellHighlighted;
     public event EventHandler CellDehighlighted;
 
+
+    private bool IsPointerOverUIObject()
+    {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
+    }
+
+
     protected virtual void OnMouseEnter()
     {
-        if (CellHighlighted != null)
-            CellHighlighted.Invoke(this, new EventArgs());
+        //if (CellHighlighted != null)
+        //CellHighlighted.Invoke(this, new EventArgs());
     }
     protected virtual void OnMouseExit()
-    {    
-        if (CellDehighlighted != null)
-            CellDehighlighted.Invoke(this, new EventArgs());
+    {
+        //if (CellDehighlighted != null)
+        //CellDehighlighted.Invoke(this, new EventArgs());
     }
     void OnMouseDown()
     {
-        if (CellClicked != null && EventSystem.current.IsPointerOverGameObject() == false)
+        if (CellClicked != null && !IsPointerOverUIObject())
             CellClicked.Invoke(this, new EventArgs());
     }
 

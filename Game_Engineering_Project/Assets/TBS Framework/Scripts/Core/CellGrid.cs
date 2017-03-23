@@ -12,6 +12,8 @@ public class CellGrid : MonoBehaviour
     public event EventHandler GameStarted;
     public event EventHandler GameEnded;
     public event EventHandler TurnEnded;
+
+    private string victoriousPlayer;
     
     private CellGridState _cellGridState;//The grid delegates some of its behaviours to cellGridState object.
     public CellGridState CellGridState
@@ -64,7 +66,7 @@ public class CellGrid : MonoBehaviour
             if (cell != null)
                 Cells.Add(cell);
             else
-                Debug.LogError("Invalid object in cells paretn game object");
+                Debug.LogError("Invalid object in cells parent game object");
         }
       
         foreach (var cell in Cells)
@@ -113,11 +115,22 @@ public class CellGrid : MonoBehaviour
         var totalPlayersAlive = Units.Select(u => u.PlayerNumber).Distinct().ToList(); //Checking if the game is over
         if (totalPlayersAlive.Count == 1)
         {
-            if(GameEnded != null)
+            if (GameEnded != null)
+                victoriousPlayer = totalPlayersAlive[0].ToString();
                 GameEnded.Invoke(this, new EventArgs());
         }
     }
-    
+
+
+    public void EndGameWhenDraw()
+    {
+        if(GameEnded != null)
+        {
+            victoriousPlayer = "-1";
+            GameEnded.Invoke(this, new EventArgs());
+        }
+    }
+
     /// <summary>
     /// Method is called once, at the beggining of the game.
     /// </summary>
@@ -153,5 +166,11 @@ public class CellGrid : MonoBehaviour
 
         Units.FindAll(u => u.PlayerNumber.Equals(CurrentPlayerNumber)).ForEach(u => { u.OnTurnStart(); });
         Players.Find(p => p.PlayerNumber.Equals(CurrentPlayerNumber)).Play(this);     
+    }
+
+
+    public string getPlayerWithLastUnitOnTheField()
+    {
+        return victoriousPlayer;
     }
 }

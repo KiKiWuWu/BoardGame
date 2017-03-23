@@ -5,13 +5,13 @@ public class CharacterSpecialAttackController : MonoBehaviour {
     private bool wasSpecialAttackSelectedByUser = false;
 
     private ActionCount actionCount;
-    private GUIControllerHexa GUIController;
+    private MessagesOnScreenController messageOnScreenController;
 
 
     void Start()
     {
         actionCount = gameObject.GetComponent<ActionCount>();
-        GUIController = gameObject.GetComponent<GUIControllerHexa>();
+        messageOnScreenController = gameObject.GetComponent<MessagesOnScreenController>();
     }
 
 
@@ -35,7 +35,7 @@ public class CharacterSpecialAttackController : MonoBehaviour {
     {
         if (!actionCount.checkRemainingPointsForSpecialAttack())
         {
-            GUIController.showInfoScreenThatSpecialAttackIsNotPossible();
+            messageOnScreenController.showSpecialAttackNotPossibleScreen();
         }
         else
         {
