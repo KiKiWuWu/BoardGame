@@ -108,7 +108,9 @@ public class NaiveAiPlayer : Player
                     break;
                 }
             }//Look for enemies in range and attack.
-        }    
-        _cellGrid.EndTurn();     
+        }
+        GUIControllerHexa guiController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GUIControllerHexa>();
+        guiController.finishTurn();
+        //_cellGrid.EndTurn();     
     }
 }

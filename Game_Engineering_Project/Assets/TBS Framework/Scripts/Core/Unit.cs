@@ -16,6 +16,7 @@ public abstract class Unit : MonoBehaviour
     private CharacterSpecialAttackController specialAttackController;
     private AllUnitsController allUnitsController;
 
+    private int HealthPointsOfDefendingUnit;
     private bool attackCurrentlyInProgress = false;
 
     public MyCastle standOnCastle;
@@ -57,6 +58,7 @@ public abstract class Unit : MonoBehaviour
     public Cell Cell { get; set; }
     
     public bool specialAttackPurchased;
+    public bool unitInDefencePosition;
     public int HitPoints;
     public int AttackRange;
     public int AttackFactor;
@@ -124,26 +126,26 @@ public abstract class Unit : MonoBehaviour
         {
             if (allUnitsController.currentlySelectedEnemyUnit() != this)
             {
-                if (HitPoints > 0)
-                {
-                    allUnitsController.selectedEnemyUnitByPlayer(this);
-                }
+                allUnitsController.selectedEnemyUnitByPlayer(this);
+                int currentHealtPointsOfEnemy;
 
                 if (attackCurrentlyInProgress)
                 {
-                    gUIController.showHPBarOfSelectedUnit("attackOnEnemy", 0, 0);
-                    attackCurrentlyInProgress = false;
+                    currentHealtPointsOfEnemy = HealthPointsOfDefendingUnit;
                 }
                 else
                 {
-                    gUIController.showHPBarOfSelectedUnit("enemy", HitPoints, TotalHitPoints);
+                    currentHealtPointsOfEnemy = HitPoints;
                 }
+                
+                gUIController.showHPBarOfSelectedUnit("enemy", currentHealtPointsOfEnemy, TotalHitPoints);
             }
             else if (allUnitsController.currentlySelectedEnemyUnit() == this && !attackCurrentlyInProgress)
             {
                 allUnitsController.selectedEnemyUnitByPlayer(null);
                 gUIController.hideHPBarOnScreen("enemy");
             }
+            attackCurrentlyInProgress = false;
         }
     }
 
@@ -170,7 +172,17 @@ public abstract class Unit : MonoBehaviour
         MovementPoints = TotalMovementPoints;
         ActionPoints = TotalActionPoints;
 
+        Buffs.FindAll(b => b.Duration == 0).ForEach(b => { b.Undo(this); });
+        Buffs.RemoveAll(b => b.Duration == 0);
+        Buffs.ForEach(b => { b.Duration--; });
+        SetState(new UnitStateNormal(this));
+
         SetState(new UnitStateMarkedAsFriendly(this));
+
+        if (unitInDefencePosition)
+        {
+            unitInDefencePosition = false;
+        }
     }
 
     /// <summary>
@@ -189,10 +201,17 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     protected virtual void OnDestroyed()
     {
+        Invoke("startDestroyProcess", 2f);
+    }
+
+
+    private void startDestroyProcess()
+    {
         Cell.IsTaken = false;
         MarkAsDestroyed();
         Destroy(gameObject);
     }
+
 
     /// <summary>
     /// Method is called when unit is selected.
@@ -282,7 +301,7 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     protected virtual void Defend(Unit other, int damage)
     {
-        int currentHitpoints = HitPoints;
+        HealthPointsOfDefendingUnit = HitPoints;
         attackCurrentlyInProgress = true;
         
         MarkAsDefending(other);
@@ -293,30 +312,30 @@ public abstract class Unit : MonoBehaviour
 
         if (HitPoints <= 0)
         {
-            gUIController.showDamageInHPBar(currentHitpoints, 0, TotalHitPoints);
+            gUIController.showDamageInHPBar(HealthPointsOfDefendingUnit, 0, TotalHitPoints);
             if (UnitDestroyed != null)
                 UnitDestroyed.Invoke(this, new AttackEventArgs(other, this, damage));
             OnDestroyed();
         }
         if (HitPoints >= 0)
         {
-            gUIController.showDamageInHPBar(currentHitpoints, HitPoints, TotalHitPoints);
+            gUIController.showDamageInHPBar(HealthPointsOfDefendingUnit, HitPoints, TotalHitPoints);
         }
     }
 
 
     public void setUnitToFinishState()
     {
-        SetState(new UnitStateMarkedAsFinished(this));
         MovementPoints = 0;
         ActionPoints = 0;
+        SetState(new UnitStateMarkedAsFinished(this));
     }
 
 
     public void destroyUnit()
     {
         UnitDestroyed.Invoke(this, new AttackEventArgs(null, this, TotalHitPoints));
-        OnDestroyed();
+        startDestroyProcess();
     }
 
 
@@ -355,7 +374,6 @@ public abstract class Unit : MonoBehaviour
         path.Reverse();
         foreach (var cell in path)
         {
-            print("ISS MOOOOVIIINNGGGG");
             while (new Vector2(transform.position.x,transform.position.y) != new Vector2(cell.transform.position.x,cell.transform.position.y))
             {
                 transform.position = Vector3.MoveTowards(transform.position, new Vector3(cell.transform.position.x,cell.transform.position.y,transform.position.z), Time.deltaTime * MovementSpeed);
