@@ -26,6 +26,8 @@ public class NaiveAiPlayer : Player
     }
     private IEnumerator Play()
     {
+        yield return new WaitForSeconds(2f);
+
         var myUnits = _cellGrid.Units.FindAll(u => u.PlayerNumber.Equals(PlayerNumber)).ToList();
         foreach (var unit in myUnits.OrderByDescending(u => u.Cell.GetNeighbours(_cellGrid.Cells).FindAll(u.IsCellTraversable).Count))
         {
