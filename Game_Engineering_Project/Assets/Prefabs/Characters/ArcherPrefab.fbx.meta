@@ -50,13 +50,14 @@ ModelImporter:
     400040: thigh.l
     400042: thigh.r
     4300000: Circle
-    7400000: MyArmature|Attack
-    7400002: MyArmature|defense_off
-    7400004: MyArmature|defense_on
-    7400006: MyArmature|idle
-    7400008: MyArmature|Sterben
-    7400010: MyArmature|Walking
+    7400000: AttackAnimation
+    7400002: DefenceOffAnimation
+    7400004: DefenceOnAnimation
+    7400006: IdleAnimation
+    7400008: DyingAnimation
+    7400010: WalkingAnimation
     9500000: //RootNode
+    11100000: //RootNode
     13700000: Circle
   materials:
     importMaterials: 1
@@ -78,7 +79,439 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: AttackAnimation
+      takeName: MyArmature|Attack
+      firstFrame: 0
+      lastFrame: 44
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Circle
+        weight: 1
+      - path: MyArmature
+        weight: 1
+      - path: MyArmature/Base
+        weight: 1
+      - path: MyArmature/Base/arm.l
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Bogen
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Bogen/Bogen_end
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Sehne
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Sehne/Sehne_end
+        weight: 1
+      - path: MyArmature/Base/arm.r
+        weight: 1
+      - path: MyArmature/Base/arm.r/hand.r
+        weight: 1
+      - path: MyArmature/Base/arm.r/hand.r/Pfeil
+        weight: 1
+      - path: MyArmature/Base/arm.r/hand.r/Pfeil/Pfeil_end
+        weight: 1
+      - path: MyArmature/Base/Kopf
+        weight: 1
+      - path: MyArmature/Base/Kopf/Kopf_end
+        weight: 1
+      - path: MyArmature/Base/thigh.l
+        weight: 1
+      - path: MyArmature/Base/thigh.l/foot.l
+        weight: 1
+      - path: MyArmature/Base/thigh.l/foot.l/foot.l_end
+        weight: 1
+      - path: MyArmature/Base/thigh.r
+        weight: 1
+      - path: MyArmature/Base/thigh.r/foot.r
+        weight: 1
+      - path: MyArmature/Base/thigh.r/foot.r/foot.r_end
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: DefenceOffAnimation
+      takeName: MyArmature|defense_off
+      firstFrame: 0
+      lastFrame: 18
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Circle
+        weight: 1
+      - path: MyArmature
+        weight: 1
+      - path: MyArmature/Base
+        weight: 1
+      - path: MyArmature/Base/arm.l
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Bogen
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Bogen/Bogen_end
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Sehne
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Sehne/Sehne_end
+        weight: 1
+      - path: MyArmature/Base/arm.r
+        weight: 1
+      - path: MyArmature/Base/arm.r/hand.r
+        weight: 1
+      - path: MyArmature/Base/arm.r/hand.r/Pfeil
+        weight: 1
+      - path: MyArmature/Base/arm.r/hand.r/Pfeil/Pfeil_end
+        weight: 1
+      - path: MyArmature/Base/Kopf
+        weight: 1
+      - path: MyArmature/Base/Kopf/Kopf_end
+        weight: 1
+      - path: MyArmature/Base/thigh.l
+        weight: 1
+      - path: MyArmature/Base/thigh.l/foot.l
+        weight: 1
+      - path: MyArmature/Base/thigh.l/foot.l/foot.l_end
+        weight: 1
+      - path: MyArmature/Base/thigh.r
+        weight: 1
+      - path: MyArmature/Base/thigh.r/foot.r
+        weight: 1
+      - path: MyArmature/Base/thigh.r/foot.r/foot.r_end
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: DefenceOnAnimation
+      takeName: MyArmature|defense_on
+      firstFrame: 0
+      lastFrame: 18
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Circle
+        weight: 1
+      - path: MyArmature
+        weight: 1
+      - path: MyArmature/Base
+        weight: 1
+      - path: MyArmature/Base/arm.l
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Bogen
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Bogen/Bogen_end
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Sehne
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Sehne/Sehne_end
+        weight: 1
+      - path: MyArmature/Base/arm.r
+        weight: 1
+      - path: MyArmature/Base/arm.r/hand.r
+        weight: 1
+      - path: MyArmature/Base/arm.r/hand.r/Pfeil
+        weight: 1
+      - path: MyArmature/Base/arm.r/hand.r/Pfeil/Pfeil_end
+        weight: 1
+      - path: MyArmature/Base/Kopf
+        weight: 1
+      - path: MyArmature/Base/Kopf/Kopf_end
+        weight: 1
+      - path: MyArmature/Base/thigh.l
+        weight: 1
+      - path: MyArmature/Base/thigh.l/foot.l
+        weight: 1
+      - path: MyArmature/Base/thigh.l/foot.l/foot.l_end
+        weight: 1
+      - path: MyArmature/Base/thigh.r
+        weight: 1
+      - path: MyArmature/Base/thigh.r/foot.r
+        weight: 1
+      - path: MyArmature/Base/thigh.r/foot.r/foot.r_end
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: IdleAnimation
+      takeName: MyArmature|idle
+      firstFrame: 0
+      lastFrame: 37
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Circle
+        weight: 1
+      - path: MyArmature
+        weight: 1
+      - path: MyArmature/Base
+        weight: 1
+      - path: MyArmature/Base/arm.l
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Bogen
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Bogen/Bogen_end
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Sehne
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Sehne/Sehne_end
+        weight: 1
+      - path: MyArmature/Base/arm.r
+        weight: 1
+      - path: MyArmature/Base/arm.r/hand.r
+        weight: 1
+      - path: MyArmature/Base/arm.r/hand.r/Pfeil
+        weight: 1
+      - path: MyArmature/Base/arm.r/hand.r/Pfeil/Pfeil_end
+        weight: 1
+      - path: MyArmature/Base/Kopf
+        weight: 1
+      - path: MyArmature/Base/Kopf/Kopf_end
+        weight: 1
+      - path: MyArmature/Base/thigh.l
+        weight: 1
+      - path: MyArmature/Base/thigh.l/foot.l
+        weight: 1
+      - path: MyArmature/Base/thigh.l/foot.l/foot.l_end
+        weight: 1
+      - path: MyArmature/Base/thigh.r
+        weight: 1
+      - path: MyArmature/Base/thigh.r/foot.r
+        weight: 1
+      - path: MyArmature/Base/thigh.r/foot.r/foot.r_end
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: DyingAnimation
+      takeName: MyArmature|Sterben
+      firstFrame: 0
+      lastFrame: 27
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Circle
+        weight: 1
+      - path: MyArmature
+        weight: 1
+      - path: MyArmature/Base
+        weight: 1
+      - path: MyArmature/Base/arm.l
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Bogen
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Bogen/Bogen_end
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Sehne
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Sehne/Sehne_end
+        weight: 1
+      - path: MyArmature/Base/arm.r
+        weight: 1
+      - path: MyArmature/Base/arm.r/hand.r
+        weight: 1
+      - path: MyArmature/Base/arm.r/hand.r/Pfeil
+        weight: 1
+      - path: MyArmature/Base/arm.r/hand.r/Pfeil/Pfeil_end
+        weight: 1
+      - path: MyArmature/Base/Kopf
+        weight: 1
+      - path: MyArmature/Base/Kopf/Kopf_end
+        weight: 1
+      - path: MyArmature/Base/thigh.l
+        weight: 1
+      - path: MyArmature/Base/thigh.l/foot.l
+        weight: 1
+      - path: MyArmature/Base/thigh.l/foot.l/foot.l_end
+        weight: 1
+      - path: MyArmature/Base/thigh.r
+        weight: 1
+      - path: MyArmature/Base/thigh.r/foot.r
+        weight: 1
+      - path: MyArmature/Base/thigh.r/foot.r/foot.r_end
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: WalkingAnimation
+      takeName: MyArmature|Walking
+      firstFrame: 0
+      lastFrame: 38
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Circle
+        weight: 1
+      - path: MyArmature
+        weight: 1
+      - path: MyArmature/Base
+        weight: 1
+      - path: MyArmature/Base/arm.l
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Bogen
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Bogen/Bogen_end
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Sehne
+        weight: 1
+      - path: MyArmature/Base/arm.l/hand.l/Sehne/Sehne_end
+        weight: 1
+      - path: MyArmature/Base/arm.r
+        weight: 1
+      - path: MyArmature/Base/arm.r/hand.r
+        weight: 1
+      - path: MyArmature/Base/arm.r/hand.r/Pfeil
+        weight: 1
+      - path: MyArmature/Base/arm.r/hand.r/Pfeil/Pfeil_end
+        weight: 1
+      - path: MyArmature/Base/Kopf
+        weight: 1
+      - path: MyArmature/Base/Kopf/Kopf_end
+        weight: 1
+      - path: MyArmature/Base/thigh.l
+        weight: 1
+      - path: MyArmature/Base/thigh.l/foot.l
+        weight: 1
+      - path: MyArmature/Base/thigh.l/foot.l/foot.l_end
+        weight: 1
+      - path: MyArmature/Base/thigh.r
+        weight: 1
+      - path: MyArmature/Base/thigh.r/foot.r
+        weight: 1
+      - path: MyArmature/Base/thigh.r/foot.r/foot.r_end
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
@@ -117,10 +550,10 @@ ModelImporter:
     rootMotionBoneName: 
     rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 1
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

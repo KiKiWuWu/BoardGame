@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>Android:13</UnityBuildTarget>
     <UnityVersion>5.5.1f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -78,6 +80,34 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\CreatedScripts\LoadScenes\MainMenuController.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\ActionCount.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\AllUnitsController.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\AttackBuff.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\BuffCollider.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\BuffExecuter.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\BuffSpawner.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\CastleCollider.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\CastleController.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\CharacterAnimationController.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\CharacterSpecialAttackController.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\CharacterStatusController.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\CursorOverPlayerController.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\DefenceBuff.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\DefencePositionUnitBuff.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\FieldDestroyerController.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\FieldPositionController.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\GUIControllerHexa.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\GoldController.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\HealingBuff.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\MessagesOnScreenController.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\MyCastle.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\MyHexagon.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\SampleUnit.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\TrackableImageOnScreenHandler.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\TurnCounter.cs" />
+    <Compile Include="Assets\CreatedScripts\MainLevelScripts\UnitOverviewController.cs" />
+    <Compile Include="Assets\CreatedScripts\TutorialScripts\TutorialScript.cs" />
     <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanDestroy.cs" />
     <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanDragLine.cs" />
     <Compile Include="Assets\LeanTouch\Examples\Scripts\LeanDragTrail.cs" />
@@ -152,33 +182,6 @@
     <Compile Include="Assets\TBS Framework\Scripts\Core\UnitStateMarkedAsReachableEnemy.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Core\UnitStateMarkedAsSelected.cs" />
     <Compile Include="Assets\TBS Framework\Scripts\Core\UnitStateNormal.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\LoadScenes\MainMenuController.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\ActionCount.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\AllUnitsController.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\AttackBuff.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\BuffCollider.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\BuffExecuter.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\BuffSpawner.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\CastleCollider.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\CastleController.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\CharacterSpecialAttackController.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\CharacterStatusController.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\CursorOverPlayerController.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\DefenceBuff.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\DefencePositionUnitBuff.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\FieldDestroyerController.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\FieldPositionController.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\GUIControllerHexa.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\GoldController.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\HealingBuff.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\MessagesOnScreenController.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\MyCastle.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\MyHexagon.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\SampleUnit.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\TrackableImageOnScreenHandler.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\TurnCounter.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\MainLevelScripts\UnitOverviewController.cs" />
-    <Compile Include="Assets\TBS Framework\Scripts\TutorialScripts\TutorialScript.cs" />
     <Compile Include="Assets\Vuforia\Scripts\BackgroundPlaneBehaviour.cs" />
     <Compile Include="Assets\Vuforia\Scripts\CloudRecoBehaviour.cs" />
     <Compile Include="Assets\Vuforia\Scripts\CylinderTargetBehaviour.cs" />

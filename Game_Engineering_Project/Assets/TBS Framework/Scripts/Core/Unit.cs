@@ -15,6 +15,7 @@ public abstract class Unit : MonoBehaviour
     private GUIControllerHexa gUIController;
     private CharacterSpecialAttackController specialAttackController;
     private AllUnitsController allUnitsController;
+    private CharacterAnimationController animationController;
 
     private int HealthPointsOfDefendingUnit;
     private bool attackCurrentlyInProgress = false;
@@ -98,6 +99,7 @@ public abstract class Unit : MonoBehaviour
         gUIController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GUIControllerHexa>();
         specialAttackController = GameObject.FindGameObjectWithTag("GameController").GetComponent<CharacterSpecialAttackController>();
         allUnitsController = GameObject.FindGameObjectWithTag("GameController").GetComponent<AllUnitsController>();
+        animationController = GameObject.FindGameObjectWithTag("GameController").GetComponent<CharacterAnimationController>();
 
         UnitState = new UnitStateNormal(this);
 
@@ -181,6 +183,7 @@ public abstract class Unit : MonoBehaviour
 
         if (unitInDefencePosition)
         {
+            animationController.showCharacterLeavingDefencePositionOffAnimation(this);
             unitInDefencePosition = false;
         }
     }
@@ -201,10 +204,19 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     protected virtual void OnDestroyed()
     {
-        Invoke("startDestroyProcess", 2f);
+        Invoke("showDeathAnimation", 1f);
+        Invoke("startDestroyProcess", 3f);
     }
 
 
+    //Plays the death animation of the current unit
+    private void showDeathAnimation()
+    {
+        animationController.showCharacterDyingAnimation(this);
+    }
+
+
+    //starts destroying the current unit
     private void startDestroyProcess()
     {
         Cell.IsTaken = false;
@@ -278,7 +290,8 @@ public abstract class Unit : MonoBehaviour
                 attackDependingOnState = AttackFactor;
             }
 
-
+            animationController.showCharacterAttackAnimation(this);
+            changeLineOfSightOfCharacter(other.Cell.transform.position, transform.position);
             MarkAsAttacking(other);
             ActionPoints--;
             actionsCounter.subtractCostOfActionFromCurrentActionCount("attack");
@@ -303,7 +316,6 @@ public abstract class Unit : MonoBehaviour
     {
         HealthPointsOfDefendingUnit = HitPoints;
         attackCurrentlyInProgress = true;
-        
         MarkAsDefending(other);
         HitPoints -= Mathf.Clamp(damage - DefenceFactor, 1, damage);  //Damage is calculated by subtracting attack factor of attacker and defence factor of defender. If result is below 1, it is set to 1.
                                                                       //This behaviour can be overridden in derived classes.
@@ -370,18 +382,64 @@ public abstract class Unit : MonoBehaviour
     protected virtual IEnumerator MovementAnimation(List<Cell> path)
     {
         isMoving = true;
-
+        animationController.startWalkingAnimation(this);
+        
         path.Reverse();
         foreach (var cell in path)
         {
+            Vector3 targetCellPosition = cell.transform.position;
+            Vector3 currentUnitPosition = transform.position;
+
+            changeLineOfSightOfCharacter(targetCellPosition, currentUnitPosition);
+            
             while (new Vector2(transform.position.x,transform.position.y) != new Vector2(cell.transform.position.x,cell.transform.position.y))
             {
                 transform.position = Vector3.MoveTowards(transform.position, new Vector3(cell.transform.position.x,cell.transform.position.y,transform.position.z), Time.deltaTime * MovementSpeed);
                 yield return 0;
             }
         }
-
+        animationController.endWalkingAnimation(this);
         isMoving = false;
+    }
+
+
+    //Changes the line of sight of the current selected character
+    private void changeLineOfSightOfCharacter(Vector3 targetCellPosition, Vector3 currentUnitPosition)
+    {
+        float gazeDirectionOfCharacter;
+        
+        if (targetCellPosition.x > currentUnitPosition.x && targetCellPosition.y > currentUnitPosition.y && targetCellPosition.z > currentUnitPosition.z)
+        {
+            gazeDirectionOfCharacter = 60f;
+        }
+        else if (targetCellPosition.x > currentUnitPosition.x && targetCellPosition.y < currentUnitPosition.y && targetCellPosition.z > currentUnitPosition.z)
+        {
+            gazeDirectionOfCharacter = 120f;
+        }
+        else if ((currentUnitPosition.x - 0.3f) < targetCellPosition.x && targetCellPosition.x < (currentUnitPosition.x + 0.3f) && targetCellPosition.y < currentUnitPosition.y && targetCellPosition.z > currentUnitPosition.z)
+        {
+            gazeDirectionOfCharacter = 180f;
+        }
+        else if (targetCellPosition.x < currentUnitPosition.x && targetCellPosition.y < currentUnitPosition.y && targetCellPosition.z > currentUnitPosition.z)
+        {
+            gazeDirectionOfCharacter = 240f;
+        }
+        else if (targetCellPosition.x < currentUnitPosition.x && targetCellPosition.y > currentUnitPosition.y && targetCellPosition.z > currentUnitPosition.z)
+        {
+            gazeDirectionOfCharacter = 300f;
+        }
+        else
+        {
+            gazeDirectionOfCharacter = 0;
+        }
+
+
+        transform.FindChild("" + name + "Character").transform.eulerAngles = new Vector3(270f, 0, 0);
+        
+        if(gazeDirectionOfCharacter != 0)
+        {
+            transform.FindChild("" + name + "Character").transform.Rotate(0, gazeDirectionOfCharacter, 0);
+        }
     }
 
     ///<summary>
