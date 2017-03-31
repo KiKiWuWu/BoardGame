@@ -11,15 +11,13 @@ public class ActionCount : MonoBehaviour
     private int costToNeutralizeOrOccupieCastle = 5;
     private int costToTakeDefencePosition = 2;
     private int additionalActionPointsFromPowerUp = 5;
-
-    private GUIControllerHexa guiController;
+    
     private CharacterSpecialAttackController specialAttackController;
 
 
     //Function is called on start
     private void Start()
     {
-        guiController = gameObject.GetComponent<GUIControllerHexa>();
         specialAttackController = gameObject.GetComponent<CharacterSpecialAttackController>();
 
         currentlyAvailableActionPoints = actionPointsEveryTurn;
